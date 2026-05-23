@@ -1,0 +1,77 @@
+{
+  "name": "grim-wrapper",
+  "displayName": "Grim Wrapper",
+  "version": "1.2.2",
+  "private": true,
+  "description": "Minimalist comment, Markdown, and plain text wrapping",
+  "categories": [
+    "Formatters"
+  ],
+  "keywords": [
+    "comment",
+    "paragraph",
+    "wrap",
+    "wrapping"
+  ],
+  "homepage": "https://github.com/sapegin/raccoon-vscode/extensions/grim-wrapper",
+  "bugs": {
+    "url": "https://github.com/sapegin/raccoon-vscode/issues"
+  },
+  "license": "MIT",
+  "author": {
+    "name": "Artem Sapegin"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sapegin/raccoon-vscode"
+  },
+  "sponsor": {
+    "url": "https://www.buymeacoffee.com/sapegin"
+  },
+  "publisher": "sapegin",
+  "main": "out/extension.js",
+  "scripts": {
+    "dev": "node ../../esbuild.config.mjs",
+    "build": "node ../../esbuild.config.mjs production",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "publish": "vsce publish",
+    "publish:ovsx": "npx ovsx publish"
+  },
+  "contributes": {
+    "commands": [
+      {
+        "command": "grimWrapper.wrapText",
+        "title": "Grim Wrapper: rewrap comment or text",
+        "enablement": "!editorReadonly"
+      }
+    ],
+    "configuration": {
+      "title": "Grim Wrapper",
+      "properties": {
+        "grimWrapper.maxLength": {
+          "scope": "language-overridable",
+          "type": "number",
+          "default": 80,
+          "description": "Controls maximum length of lines in characters."
+        }
+      }
+    }
+  },
+  "activationEvents": [
+    "onLanguage"
+  ],
+  "icon": "images/icon.png",
+  "galleryBanner": {
+    "color": "#27365a",
+    "theme": "dark"
+  },
+  "engines": {
+    "vscode": "^1.75.0"
+  },
+  "capabilities": {
+    "untrustedWorkspaces": {
+      "supported": true
+    }
+  }
+}

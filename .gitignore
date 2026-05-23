@@ -1,0 +1,14 @@
+# Editors
+.vscode
+.idea
+*.iml
+
+# npm
+node_modules
+
+# Built bundles (rebuilt locally and loaded from out/)
+extensions/*/out
+extensions/*/*.vsix
+
+# macOS / caches
+.DS_Store

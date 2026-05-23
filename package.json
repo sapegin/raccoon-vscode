@@ -1,0 +1,43 @@
+{
+  "name": "raccoon-vscode",
+  "private": true,
+  "description": "Monorepo of Artem Sapegin's Visual Studio Code extensions",
+  "license": "MIT",
+  "author": {
+    "name": "Artem Sapegin",
+    "url": "https://sapegin.me/"
+  },
+  "workspaces": [
+    "extensions/*"
+  ],
+  "type": "module",
+  "scripts": {
+    "build": "npm run build --workspaces --if-present",
+    "dev": "npm run dev --workspaces --if-present",
+    "test": "oxlint && npm run build && npm test --workspaces --if-present",
+    "lint": "oxlint --fix",
+    "format": "oxfmt",
+    "prepare": "husky"
+  },
+  "devDependencies": {
+    "@types/node": "24.10.1",
+    "@types/vscode": "1.75.0",
+    "@vscode/vsce": "3.9.1",
+    "esbuild": "0.28.0",
+    "husky": "9.1.7",
+    "nano-staged": "1.0.2",
+    "oxfmt": "0.51.0",
+    "oxlint": "1.66.0",
+    "oxlint-config-raccoon": "10.1.0",
+    "oxlint-tsgolint": "0.23.0",
+    "typescript": "6.0.3",
+    "vitest": "4.1.6"
+  },
+  "nano-staged": {
+    "*.{js,mjs,cjs,ts,tsx}": "oxlint --fix",
+    "*.{js,mjs,cjs,ts,tsx,json,jsonc,md}": "oxfmt"
+  },
+  "engines": {
+    "node": ">=24"
+  }
+}

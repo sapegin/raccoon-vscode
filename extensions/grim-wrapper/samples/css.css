@@ -1,0 +1,14 @@
+@media print {
+  /* there are no JS events on autofill,
+  so we have to simulate the change on the adjacent input label,
+  see the styling in the FormInput component */
+  input:-webkit-autofill + label {
+    color: salmon;
+  }
+}
+
+/*
+  Add additional folders where Tailwind should look for class names. The `@stageplus/*` notation doesn't work here.
+
+  Sorrow tapping over rapping borrow for the lost Lenore volume came morrow it. Only had gently each volume radiant December there came the napping quaint ghost bleak dying curious. Quaint for the lost Lenore borrow sorrow muttered ah I vainly over nodded volume.
+*/
