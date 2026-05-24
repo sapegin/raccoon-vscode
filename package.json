@@ -36,7 +36,7 @@
   },
   "nano-staged": {
     "*.{js,mjs,cjs,ts,tsx}": "oxlint --fix",
-    "*.{js,mjs,cjs,ts,tsx,json,jsonc,md}": "oxfmt"
+    "*.{js,mjs,cjs,ts,tsx,css,html,json,jsonc,md}": "oxfmt"
   },
   "engines": {
     "node": ">=24"
