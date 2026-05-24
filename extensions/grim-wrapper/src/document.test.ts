@@ -36,11 +36,11 @@ function simulateWrap(
   // Walk up
   let startLine = cursorLine;
   while (true) {
-    const lineText = lines[startLine].trim();
+    const lineText = lines[startLine]?.trim() ?? '';
     if (isCommentStart(lineText)) {
       break;
     }
-    if (isParagraphBreak(lines[startLine], style)) {
+    if (isParagraphBreak(lineText, style)) {
       startLine++;
       break;
     }
@@ -53,11 +53,11 @@ function simulateWrap(
   // Walk down
   let endLine = cursorLine;
   while (true) {
-    const lineText = lines[endLine].trim();
+    const lineText = lines[endLine]?.trim() ?? '';
     if (isCommentEnd(lineText)) {
       break;
     }
-    if (isParagraphBreak(lines[endLine], style)) {
+    if (isParagraphBreak(lineText, style)) {
       endLine--;
       break;
     }
@@ -68,7 +68,7 @@ function simulateWrap(
   }
 
   const text = lines.slice(startLine, endLine + 1).join('\n');
-  const rangeIncludesBlockOpen = isCommentStart(lines[startLine].trim());
+  const rangeIncludesBlockOpen = isCommentStart(lines[startLine]?.trim() ?? '');
   const needsSyntheticMarkers =
     style === 'block-bare' && rangeIncludesBlockOpen === false;
 

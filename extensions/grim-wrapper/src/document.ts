@@ -204,7 +204,7 @@ export function wrapBareBlockParagraph(text: string, maxLength: number) {
   const lines = wrapped.split('\n');
 
   // Remove the synthetic opening `/*` line
-  if (lines[0].trim() === '/*') {
+  if (lines[0]?.trim() === '/*') {
     lines.shift();
   }
 

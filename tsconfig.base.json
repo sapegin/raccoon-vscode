@@ -12,6 +12,8 @@
     "resolveJsonModule": true,
     "esModuleInterop": true,
     "strict": true,
-    "lib": ["DOM", "ES2024"]
+    "noUncheckedIndexedAccess": true,
+    "lib": ["DOM", "ES2024"],
+    "types": ["node"]
   }
 }

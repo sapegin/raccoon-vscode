@@ -314,7 +314,7 @@ export function wrapTextBlock(text: string, maxLength: number) {
     lines.push(currentLine);
   }
 
-  if (lines.length === 1 && lines[0].length > maxLength) {
+  if (lines.length === 1 && (lines[0] ?? '').length > maxLength) {
     return [text];
   }
 
