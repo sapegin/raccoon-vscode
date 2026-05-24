@@ -1,0 +1,100 @@
+{
+  "name": "mini-markdown",
+  "displayName": "Mini Markdown",
+  "version": "1.1.1",
+  "description": "A minimalist kit for comfortable Markdown writing: commands, hotkeys, autocomplete…",
+  "categories": [
+    "Other"
+  ],
+  "keywords": [
+    "autocomplete",
+    "editor",
+    "keybindings",
+    "markdown",
+    "markdown editor",
+    "shortcuts",
+    "snippets"
+  ],
+  "homepage": "https://github.com/sapegin/raccoon-vscode/extensions/mini-markdown",
+  "bugs": {
+    "url": "https://github.com/sapegin/raccoon-vscode/issues"
+  },
+  "license": "MIT",
+  "author": {
+    "name": "Artem Sapegin"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sapegin/raccoon-vscode"
+  },
+  "sponsor": {
+    "url": "https://www.buymeacoffee.com/sapegin"
+  },
+  "publisher": "sapegin",
+  "main": "out/extension.js",
+  "scripts": {
+    "dev": "node ../../esbuild.config.mjs",
+    "build": "node ../../esbuild.config.mjs production",
+    "publish": "vsce publish",
+    "publish:ovsx": "npx ovsx publish"
+  },
+  "contributes": {
+    "commands": [
+      {
+        "command": "miniMarkdown.toggleEmphasis",
+        "title": "Mini Markdown: toggle emphasis (italic)",
+        "enablement": "!editorReadonly && editorLangId == markdown"
+      },
+      {
+        "command": "miniMarkdown.toggleStrongEmphasis",
+        "title": "Mini Markdown: Toggle strong emphasis (bold)",
+        "enablement": "!editorReadonly && editorLangId == markdown"
+      },
+      {
+        "command": "miniMarkdown.insertTable",
+        "title": "Mini Markdown: Insert a table",
+        "enablement": "!editorReadonly && editorLangId == markdown"
+      }
+    ],
+    "keybindings": [
+      {
+        "key": "ctrl+b",
+        "mac": "cmd+b",
+        "command": "miniMarkdown.toggleStrongEmphasis",
+        "when": "!editorReadonly && editorLangId == markdown"
+      },
+      {
+        "key": "ctrl+i",
+        "mac": "cmd+i",
+        "command": "miniMarkdown.toggleEmphasis",
+        "when": "!editorReadonly &&editorLangId == markdown"
+      },
+      {
+        "key": "enter",
+        "command": "miniMarkdown.onEnterKey",
+        "when": "editorTextFocus && !editorReadonly && editorLangId == markdown && (!suggestWidgetVisible || config.editor.acceptSuggestionOnEnter == 'off') && !editorHasMultipleSelections"
+      },
+      {
+        "key": "tab",
+        "command": "miniMarkdown.onTabKey",
+        "when": "editorTextFocus && !editorReadonly && editorLangId == markdown && (!suggestWidgetVisible || config.editor.acceptSuggestionOnEnter == 'off') && !editorHasMultipleSelections"
+      },
+      {
+        "key": "shift+tab",
+        "command": "miniMarkdown.onShiftTabKey",
+        "when": "editorTextFocus && !editorReadonly && editorLangId == markdown && (!suggestWidgetVisible || config.editor.acceptSuggestionOnEnter == 'off') && !editorHasMultipleSelections"
+      }
+    ]
+  },
+  "activationEvents": [
+    "onLanguage:markdown"
+  ],
+  "icon": "images/icon.png",
+  "galleryBanner": {
+    "color": "#fae3c8",
+    "theme": "light"
+  },
+  "engines": {
+    "vscode": "^1.75.0"
+  }
+}

@@ -85,10 +85,10 @@ This software has been developed with lots of coffee, buy me one more cup to kee
 
 ## Contributing
 
-Bug fixes are welcome, but not new features. Please take a moment to review the [contributing guidelines](Contributing.md).
+Bug fixes are welcome, but not new features. Please take a moment to review the [contributing guidelines](../../Contributing.md).
 
 ## Authors and license
 
-[Artem Sapegin](https://sapegin.me), and [contributors](https://github.com/sapegin/vscode-grim-wrapper/graphs/contributors).
+[Artem Sapegin](https://sapegin.me), and [contributors](https://github.com/sapegin/raccoon-vscode/graphs/contributors).
 
 MIT License, see the included [License.md](License.md) file.

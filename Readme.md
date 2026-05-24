@@ -7,6 +7,8 @@ Monorepo of [Artem Sapegin](https://sapegin.me/)’s Visual Studio Code extensio
 ## Extensions
 
 - [grim-wrapper](extensions/grim-wrapper): Minimalist comment, Markdown, and plain text wrapping.
+- [just-blame](extensions/just-blame): Git Blame annotations sidebar, inspired by JetBrains editors.
+- [mini-markdown](extensions/mini-markdown): A minimalist kit for comfortable Markdown writing: commands, hotkeys, autocomplete…
 
 ## Usage
 
