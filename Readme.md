@@ -10,6 +10,7 @@ Monorepo of [Artem Sapegin](https://sapegin.me/)’s Visual Studio Code extensio
 - [just-blame](extensions/just-blame): Git Blame annotations sidebar, inspired by JetBrains editors.
 - [mini-markdown](extensions/mini-markdown): A minimalist kit for comfortable Markdown writing: commands, hotkeys, autocomplete…
 - [new-file-now](extensions/new-file-now): Create new files from the command palette.
+- [notebox](extensions/notebox): Take quick notes in the panel.
 
 ## Usage
 

@@ -1,0 +1,74 @@
+{
+  "name": "notebox",
+  "displayName": "Notebox",
+  "version": "1.0.4",
+  "description": "Take quick notes in the panel",
+  "categories": [
+    "Other"
+  ],
+  "keywords": [
+    "notebook",
+    "notebox",
+    "notepad",
+    "notes",
+    "panel",
+    "scratchpad",
+    "writing"
+  ],
+  "homepage": "https://github.com/sapegin/raccoon-vscode/extensions/notebox",
+  "bugs": {
+    "url": "https://github.com/sapegin/raccoon-vscode/issues"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sapegin/raccoon-vscode.git"
+  },
+  "sponsor": {
+    "url": "https://www.buymeacoffee.com/sapegin"
+  },
+  "publisher": "sapegin",
+  "main": "out/extension.js",
+  "scripts": {
+    "dev": "node ../../esbuild.config.mjs",
+    "build": "node ../../esbuild.config.mjs production",
+    "publish": "vsce publish",
+    "publish:ovsx": "npx ovsx publish"
+  },
+  "contributes": {
+    "viewsContainers": {
+      "panel": [
+        {
+          "id": "notebox",
+          "title": "Notes",
+          "icon": "$(note)"
+        }
+      ]
+    },
+    "views": {
+      "notebox": [
+        {
+          "type": "webview",
+          "id": "notebox.noteboxView",
+          "name": "notebox",
+          "icon": "$(note)"
+        }
+      ]
+    }
+  },
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "icon": "images/icon.png",
+  "galleryBanner": {
+    "color": "#daf9f9"
+  },
+  "engines": {
+    "vscode": "^1.75.0"
+  },
+  "capabilities": {
+    "untrustedWorkspaces": {
+      "supported": "limited"
+    }
+  }
+}
