@@ -1,0 +1,51 @@
+{
+  "name": "reveal-in-nimble-commander",
+  "displayName": "Reveal in Nimble Commander",
+  "version": "1.0.1",
+  "description": "Reveal current project or file in Nimble Commander",
+  "categories": [
+    "Other"
+  ],
+  "keywords": [
+    "app",
+    "application",
+    "external",
+    "file manager",
+    "nimble commander",
+    "open",
+    "reveal"
+  ],
+  "homepage": "https://github.com/sapegin/raccoon-vscode/extensions/reveal-in-nimble-commander",
+  "bugs": {
+    "url": "https://github.com/sapegin/raccoon-vscode/issues"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sapegin/raccoon-vscode.git"
+  },
+  "sponsor": {
+    "url": "https://www.buymeacoffee.com/sapegin"
+  },
+  "publisher": "sapegin",
+  "main": "out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "revealInNimbleCommander.revealProject",
+        "title": "Project: Reveal in Nimble Commander"
+      },
+      {
+        "command": "revealInNimbleCommander.revealFile",
+        "title": "File: Reveal in Nimble Commander"
+      }
+    ]
+  },
+  "icon": "images/icon.png",
+  "galleryBanner": {
+    "color": "#dee0fd"
+  },
+  "engines": {
+    "vscode": "^1.75.0"
+  }
+}
