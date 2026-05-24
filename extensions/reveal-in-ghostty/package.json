@@ -1,0 +1,65 @@
+{
+  "name": "reveal-in-ghostty",
+  "displayName": "Reveal in Ghostty",
+  "version": "1.1.0",
+  "description": "Reveal current project or folder in Ghostty",
+  "categories": [
+    "Other"
+  ],
+  "keywords": [
+    "app",
+    "application",
+    "emulator",
+    "external",
+    "ghostty",
+    "open",
+    "reveal",
+    "terminal"
+  ],
+  "homepage": "https://github.com/raccoon-vscode/extensions/reveal-in-ghostty",
+  "bugs": {
+    "url": "https://github.com/sapegin/raccoon-vscode/issues"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sapegin/raccoon-vscode.git"
+  },
+  "sponsor": {
+    "url": "https://www.buymeacoffee.com/sapegin"
+  },
+  "publisher": "sapegin",
+  "main": "out/extension.js",
+  "dependencies": {
+    "open": "^10.1.0"
+  },
+  "contributes": {
+    "commands": [
+      {
+        "command": "revealInGhostty.revealProject",
+        "title": "Reveal in Ghostty",
+        "category": "Project"
+      },
+      {
+        "command": "revealInGhostty.revealFile",
+        "title": "Reveal in Ghostty",
+        "category": "File"
+      }
+    ],
+    "menus": {
+      "explorer/context": [
+        {
+          "command": "revealInGhostty.revealFile",
+          "group": "navigation@21"
+        }
+      ]
+    }
+  },
+  "icon": "images/icon.png",
+  "galleryBanner": {
+    "color": "#ddecff"
+  },
+  "engines": {
+    "vscode": "^1.75.0"
+  }
+}

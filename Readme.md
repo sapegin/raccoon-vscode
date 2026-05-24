@@ -11,6 +11,7 @@ Monorepo of [Artem Sapegin](https://sapegin.me/)’s Visual Studio Code extensio
 - [mini-markdown](extensions/mini-markdown): A minimalist kit for comfortable Markdown writing: commands, hotkeys, autocomplete…
 - [new-file-now](extensions/new-file-now): Create new files from the command palette.
 - [notebox](extensions/notebox): Take quick notes in the panel.
+- [reveal-in-ghostty](extensions/reveal-in-ghostty): Reveal current project or folder in Ghostty.
 
 ## Usage
 
