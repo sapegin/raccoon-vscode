@@ -5,7 +5,6 @@ const debug = window.createOutputChannel(packageJson.displayName);
 
 /**
  * Log debug message or data
- * TODO: Make it a shared module, as all extensions use the same code
  */
 export function logMessage(...messages: unknown[]) {
   debug.appendLine(

@@ -1,0 +1,58 @@
+{
+  "name": "new-file-now",
+  "displayName": "New File Now",
+  "version": "1.0.6",
+  "description": "Create new files from the command palette",
+  "categories": [
+    "Other"
+  ],
+  "keywords": [
+    "command palette",
+    "create",
+    "file",
+    "new",
+    "new file"
+  ],
+  "homepage": "https://github.com/sapegin/raccoon-vscode/extensions/new-file-now",
+  "bugs": {
+    "url": "https://github.com/sapegin/raccoon-vscode/issues"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sapegin/raccoon-vscode.git"
+  },
+  "sponsor": {
+    "url": "https://www.buymeacoffee.com/sapegin"
+  },
+  "publisher": "sapegin",
+  "main": "out/extension.js",
+  "scripts": {
+    "dev": "node ../../esbuild.config.mjs",
+    "build": "node ../../esbuild.config.mjs production",
+    "publish": "vsce publish",
+    "publish:ovsx": "npx ovsx publish"
+  },
+  "contributes": {
+    "commands": [
+      {
+        "command": "newFileNow.createNewFile",
+        "title": "New File Now"
+      }
+    ],
+    "keybindings": [
+      {
+        "command": "newFileNow.createNewFile",
+        "key": "ctrl+alt+n",
+        "mac": "cmd+opt+n"
+      }
+    ]
+  },
+  "icon": "images/icon.png",
+  "galleryBanner": {
+    "color": "#ffddcf"
+  },
+  "engines": {
+    "vscode": "^1.75.0"
+  }
+}
