@@ -14,7 +14,8 @@
   "scripts": {
     "build": "npm run build --workspaces --if-present",
     "dev": "npm run dev --workspaces --if-present",
-    "test": "oxlint --fix && npm run build && npm test --workspaces --if-present",
+    "test": "oxlint --fix && npm run build && vitest run",
+    "test:watch": "vitest",
     "lint": "oxlint --fix",
     "format": "oxfmt",
     "prepare": "husky"
