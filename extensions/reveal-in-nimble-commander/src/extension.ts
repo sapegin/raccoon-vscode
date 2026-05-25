@@ -1,20 +1,17 @@
-import childProcess from 'node:child_process';
-import { promisify } from 'node:util';
 import { window, commands, type ExtensionContext, workspace } from 'vscode';
+import { openInApp } from '../../../shared/openInApp';
 import { logMessage } from './debug';
 
-export const promiseExec = promisify(childProcess.exec);
-
 /**
- * Execute command with error handling
+ * Open given path in Nimble Commander
  */
-async function execute(command: string) {
+async function openNimbleCommander(filepath: string) {
   try {
-    await promiseExec(command);
+    await openInApp('Nimble Commander', filepath);
   } catch (error) {
-    logMessage('Cannot execute command:', error);
+    logMessage('Cannot open Nimble Commander:', error);
     if (error instanceof Error) {
-      window.showErrorMessage(error.message);
+      window.showErrorMessage('Cannot open Nimble Commander');
     }
   }
 }
@@ -36,7 +33,7 @@ export function activate(context: ExtensionContext) {
 
       logMessage('Reval file', filepath);
 
-      await execute(`open -a 'Nimble Commander' '${filepath}'`);
+      await openNimbleCommander(filepath);
     }),
     commands.registerCommand(
       'revealInNimbleCommander.revealProject',
@@ -59,7 +56,7 @@ export function activate(context: ExtensionContext) {
 
         logMessage('Reval project', projectPath);
 
-        await execute(`open -a 'Nimble Commander' '${projectPath}'`);
+        await openNimbleCommander(projectPath);
       }
     )
   );

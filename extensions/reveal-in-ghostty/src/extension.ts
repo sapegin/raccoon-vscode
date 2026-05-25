@@ -1,7 +1,4 @@
-import childProcess from 'node:child_process';
 import path from 'node:path';
-import { promisify } from 'node:util';
-import open from 'open';
 import {
   window,
   commands,
@@ -9,22 +6,19 @@ import {
   workspace,
   type Uri,
 } from 'vscode';
+import { openInApp } from '../../../shared/openInApp';
 import { logMessage } from './debug';
-
-export const promiseExec = promisify(childProcess.exec);
 
 /**
  * Open given path in Ghostty
- * XXX: This supposed to work cross-platform but was only tested on macOS,
- * and may need adjustments for other platforms
  */
 async function openGhostty(filepath: string) {
   try {
-    await open(filepath, { app: { name: 'ghostty' } });
+    await openInApp('Ghostty', filepath);
   } catch (error) {
     logMessage('Cannot open Ghostty:', error);
     if (error instanceof Error) {
-      window.showErrorMessage(error.message);
+      window.showErrorMessage('Cannot open Ghostty');
     }
   }
 }

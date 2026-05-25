@@ -12,7 +12,7 @@ Monorepo of [Artem Sapegin](https://sapegin.me/)’s Visual Studio Code extensio
 - [new-file-now](extensions/new-file-now): Create new files from the command palette.
 - [notebox](extensions/notebox): Take quick notes in the panel.
 - [reveal-in-ghostty](extensions/reveal-in-ghostty): Reveal current project or folder in Ghostty.
-- [vscode-reveal-in-nimble-commander](extensions/vscode-reveal-in-nimble-commander): Reveal current project or file in Nimble Commander.
+- [reveal-in-nimble-commander](extensions/reveal-in-nimble-commander): Reveal current project or file in Nimble Commander.
 
 ## Usage
 
