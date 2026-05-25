@@ -1,0 +1,114 @@
+{
+  "name": "todo-tomorrow",
+  "displayName": "Todo Tomorrow",
+  "version": "1.3.3",
+  "description": "Highlights TODO, HACK, FIXME, etc. comments",
+  "categories": [
+    "Other"
+  ],
+  "keywords": [
+    "annotation",
+    "comment",
+    "fixme",
+    "hack",
+    "highlight",
+    "keyword",
+    "todo"
+  ],
+  "homepage": "https://github.com/sapegin/raccoon-vscode/extensions/todo-tomorrow",
+  "bugs": {
+    "url": "https://github.com/sapegin/raccoon-vscode/issues"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sapegin/raccoon-vscode.git"
+  },
+  "sponsor": {
+    "url": "https://www.buymeacoffee.com/sapegin"
+  },
+  "publisher": "sapegin",
+  "main": "out/extension.js",
+  "scripts": {
+    "dev": "node ../../esbuild.config.mjs",
+    "build": "node ../../esbuild.config.mjs production",
+    "publish": "vsce publish",
+    "publish:ovsx": "npx ovsx publish"
+  },
+  "contributes": {
+    "configuration": {
+      "type": "object",
+      "title": "Todo Tomorrow",
+      "properties": {
+        "todoTomorrow.patterns": {
+          "type": "array",
+          "description": "Groups of patterns",
+          "items": {
+            "type": "object",
+            "properties": {
+              "keywords": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "description": "Keyword, for example `todo` (case insensitive)"
+                }
+              },
+              "color": {
+                "type": "string",
+                "description": "Text color"
+              },
+              "backgroundColor": {
+                "type": "string",
+                "description": "Background color"
+              },
+              "fontWeight": {
+                "type": "string",
+                "description": "Font weight, for example `bold`"
+              }
+            }
+          },
+          "default": [
+            {
+              "keywords": [
+                "bodge",
+                "bug",
+                "hack",
+                "kludge",
+                "ugly",
+                "xxx"
+              ],
+              "fontWeight": "bold",
+              "light": {
+                "color": "#4c4b4e"
+              },
+              "dark": {
+                "color": "#dcd5c0"
+              }
+            },
+            {
+              "keywords": [
+                "debug",
+                "fixme",
+                "fix",
+                "note",
+                "todo",
+                "undone"
+              ],
+              "fontWeight": "bold"
+            }
+          ]
+        }
+      }
+    }
+  },
+  "activationEvents": [
+    "onLanguage"
+  ],
+  "icon": "images/icon.png",
+  "galleryBanner": {
+    "color": "#b8dcea"
+  },
+  "engines": {
+    "vscode": "^1.75.0"
+  }
+}

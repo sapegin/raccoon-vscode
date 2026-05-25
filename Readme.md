@@ -13,6 +13,7 @@ Monorepo of [Artem Sapegin](https://sapegin.me/)’s Visual Studio Code extensio
 - [notebox](extensions/notebox): Take quick notes in the panel.
 - [reveal-in-ghostty](extensions/reveal-in-ghostty): Reveal current project or folder in Ghostty.
 - [reveal-in-nimble-commander](extensions/reveal-in-nimble-commander): Reveal current project or file in Nimble Commander.
+- [todo-tomorrow](extensions/todo-tomorrow): Highlights TODO, HACK, FIXME, etc. comments.
 
 ## Usage
 
