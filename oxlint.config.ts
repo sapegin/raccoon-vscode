@@ -7,8 +7,5 @@ export default defineConfig({
     typeAware: true,
     typeCheck: true,
   },
-  ignorePatterns: [
-    'extensions/*/out',
-    'extensions/todo-tomorrow/samples/{javascript,typescript}.*',
-  ],
+  ignorePatterns: ['extensions/*/out', 'extensions/*/samples/*'],
 });

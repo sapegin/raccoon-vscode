@@ -1,0 +1,105 @@
+{
+  "name": "emoji-console-log",
+  "displayName": "Emoji Console Log",
+  "version": "1.2.5",
+  "description": "Inserts console.log() statements with a random emoji",
+  "categories": [
+    "Debuggers",
+    "Other",
+    "Snippets",
+    "Testing"
+  ],
+  "keywords": [
+    "console",
+    "debugging",
+    "emoji",
+    "log",
+    "logging"
+  ],
+  "homepage": "https://github.com/sapegin/raccoon-vscode/extensions/emoji-console-log",
+  "bugs": {
+    "url": "https://github.com/sapegin/raccoon-vscode/issues"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sapegin/raccoon-vscode"
+  },
+  "sponsor": {
+    "url": "https://www.buymeacoffee.com/sapegin"
+  },
+  "publisher": "sapegin",
+  "main": "./out/extension.js",
+  "scripts": {
+    "dev": "node ../../esbuild.config.mjs",
+    "build": "node ../../esbuild.config.mjs production",
+    "publish": "vsce publish",
+    "publish:ovsx": "npx ovsx publish"
+  },
+  "contributes": {
+    "configuration": {
+      "type": "object",
+      "title": "Emoji Console Log Configuration",
+      "properties": {
+        "emojiConsoleLog.logFunction": {
+          "type": "string",
+          "default": "console.log",
+          "description": "Function to log the values."
+        }
+      }
+    },
+    "commands": [
+      {
+        "command": "emojiConsoleLog.addLogMessage",
+        "title": "Emoji Console Log: Add log message"
+      },
+      {
+        "command": "emojiConsoleLog.commentAllLogMessages",
+        "title": "Emoji Console Log: Comment all log messages"
+      },
+      {
+        "command": "emojiConsoleLog.uncommentAllLogMessages",
+        "title": "Emoji Console Log: Uncomment all log messages"
+      },
+      {
+        "command": "emojiConsoleLog.removeAllLogMessages",
+        "title": "Emoji Console Log: Delete all log messages"
+      }
+    ],
+    "keybindings": [
+      {
+        "command": "emojiConsoleLog.addLogMessage",
+        "key": "shift+alt+l",
+        "mac": "shift+alt+l"
+      },
+      {
+        "command": "emojiConsoleLog.commentAllLogMessages",
+        "key": "shift+alt+c",
+        "mac": "shift+alt+c"
+      },
+      {
+        "command": "emojiConsoleLog.uncommentAllLogMessages",
+        "key": "shift+alt+u",
+        "mac": "shift+alt+u"
+      },
+      {
+        "command": "emojiConsoleLog.removeAllLogMessages",
+        "key": "shift+alt+d",
+        "mac": "shift+alt+d"
+      }
+    ]
+  },
+  "activationEvents": [
+    "onLanguage:javascript",
+    "onLanguage:javascriptreact",
+    "onLanguage:typescript",
+    "onLanguage:typescriptreact"
+  ],
+  "icon": "images/icon.png",
+  "galleryBanner": {
+    "color": "#f8dab9"
+  },
+  "engines": {
+    "vscode": "^1.75.0"
+  }
+}
