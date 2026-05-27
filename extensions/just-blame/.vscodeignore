@@ -7,5 +7,6 @@ src/**
 screenshots/**
 samples/**
 Contributing.md
+Changelog.md
 tsconfig.json
 *.config.*
