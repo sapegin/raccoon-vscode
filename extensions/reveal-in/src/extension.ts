@@ -1,4 +1,6 @@
+import { execFile } from 'node:child_process';
 import path from 'node:path';
+import { promisify } from 'node:util';
 import {
   window,
   commands,
@@ -8,6 +10,8 @@ import {
 } from 'vscode';
 import { openInApp } from '../../../shared/openInApp';
 import { logMessage } from './debug';
+
+const execFileAsync = promisify(execFile);
 
 /**
  * Open given path in a given app.
@@ -64,6 +68,26 @@ async function revealProjectInApp(app: string) {
   await openPathInApp(app, projectPath);
 }
 
+async function revealProjectViaCli(app: string, cli: string, arg: string) {
+  const { uri } = window.activeTextEditor?.document ?? {};
+  const projectPath = getProjectPath(uri);
+  if (projectPath === undefined) {
+    window.showWarningMessage(`Open a workspace to use Reveal in ${app}`);
+    return;
+  }
+
+  logMessage(`Reveal project in ${app}`, projectPath);
+
+  try {
+    await execFileAsync(cli, [arg, projectPath]);
+  } catch (error) {
+    logMessage(`Cannot open ${app}:`, error);
+    if (error instanceof Error) {
+      window.showErrorMessage(`Cannot open ${app}`);
+    }
+  }
+}
+
 export function activate(context: ExtensionContext) {
   logMessage('📂 Reveal in starting…');
 
@@ -73,6 +97,9 @@ export function activate(context: ExtensionContext) {
     }),
     commands.registerCommand('revealIn.revealProjectGhostty', () => {
       return revealProjectInApp('Ghostty');
+    }),
+    commands.registerCommand('revealIn.revealProjectGitHubDesktop', () => {
+      return revealProjectViaCli('GitHub Desktop', 'github', 'open');
     }),
     commands.registerCommand('revealIn.revealFileNimbleCommander', () => {
       return revealFileInApp('Nimble Commander');

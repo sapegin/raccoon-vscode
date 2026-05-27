@@ -46,6 +46,11 @@
         "category": "File"
       },
       {
+        "command": "revealIn.revealProjectGitHubDesktop",
+        "title": "Reveal in GitHub Desktop",
+        "category": "Project"
+      },
+      {
         "command": "revealIn.revealProjectNimbleCommander",
         "title": "Reveal in Nimble Commander",
         "category": "Project"

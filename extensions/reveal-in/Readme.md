@@ -15,12 +15,13 @@ Reveal current project or folder in external apps:
 
 You can either run this commands from the Command Palette (<kbd>Cmd</kbd>+<kbd>Shift</kbd>+<kbd>P</kbd> on a Mac, or <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>P</kbd> on Windows), or [assign hotkeys](https://code.visualstudio.com/docs/getstarted/keybindings).
 
-| Description | Name |
+| Name | Description |
 | --- | --- |
-| Reveal project root folder in Ghostty | `revealIn.revealProjectGhostty` |
-| Reveal currently open folder in Ghostty | `revealIn.revealFileGhostty` |
-| Reveal project root folder in Nimble Commander | `revealIn.revealProjectNimbleCommander` |
-| Reveal currently open folder in Nimble Commander | `revealIn.revealFileNimbleCommander` |
+| `revealIn.revealProjectGhostty` | Reveal project root folder in Ghostty |
+| `revealIn.revealFileGhostty` | Reveal currently open folder in Ghostty |
+| `revealIn.revealProjectGitHubDesktop` | Reveal project root folder in GitHub Desktop |
+| `revealIn.revealProjectNimbleCommander` | Reveal project root folder in Nimble Commander |
+| `revealIn.revealFileNimbleCommander` | Reveal currently open folder in Nimble Commander |
 
 You can also access the commands via Explorer context menu.
 
