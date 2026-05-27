@@ -20,7 +20,9 @@
   "author": {
     "name": "Artem Sapegin"
   },
-  "repository": "https://github.com/sapegin/raccoon-vscode/tree/main/extensions/",
+  "repository": {
+    "url": "https://github.com/sapegin/raccoon-vscode/tree/main/extensions/"
+  },
   "sponsor": {
     "url": "https://www.buymeacoffee.com/sapegin"
   },

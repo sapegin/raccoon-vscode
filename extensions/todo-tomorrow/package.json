@@ -17,7 +17,9 @@
   ],
   "bugs": "https://github.com/sapegin/raccoon-vscode/issues",
   "license": "MIT",
-  "repository": "https://github.com/sapegin/raccoon-vscode/tree/main/extensions/todo-tomorrow",
+  "repository": {
+    "url": "https://github.com/sapegin/raccoon-vscode/tree/main/extensions/todo-tomorrow"
+  },
   "sponsor": {
     "url": "https://www.buymeacoffee.com/sapegin"
   },

@@ -17,7 +17,9 @@
   ],
   "bugs": "https://github.com/sapegin/raccoon-vscode/issues",
   "license": "MIT",
-  "repository": "https://github.com/sapegin/raccoon-vscode/tree/main/extensions/reveal-in-nimble-commander",
+  "repository": {
+    "url": "https://github.com/sapegin/raccoon-vscode/tree/main/extensions/reveal-in-nimble-commander"
+  },
   "sponsor": {
     "url": "https://www.buymeacoffee.com/sapegin"
   },
