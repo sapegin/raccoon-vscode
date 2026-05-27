@@ -3,6 +3,7 @@
 Reveal current project or folder in external apps:
 
 - [Ghostty](https://ghostty.org/)
+- [GitHub Desktop](https://github.com/apps/desktop)
 - [Nimble Commander](https://magnumbytes.com)
 
 ![Reveal in Ghostty in Explorer context menu](./screenshots/screenshot-explorer.png)
