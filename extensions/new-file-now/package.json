@@ -13,15 +13,9 @@
     "new",
     "new file"
   ],
-  "homepage": "https://github.com/sapegin/raccoon-vscode/extensions/new-file-now",
-  "bugs": {
-    "url": "https://github.com/sapegin/raccoon-vscode/issues"
-  },
+  "bugs": "https://github.com/sapegin/raccoon-vscode/issues",
   "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/sapegin/raccoon-vscode.git"
-  },
+  "repository": "https://github.com/sapegin/raccoon-vscode/tree/main/extensions/new-file-now",
   "sponsor": {
     "url": "https://www.buymeacoffee.com/sapegin"
   },

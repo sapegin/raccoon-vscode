@@ -16,15 +16,9 @@
     "reveal",
     "terminal"
   ],
-  "homepage": "https://github.com/raccoon-vscode/extensions/reveal-in-ghostty",
-  "bugs": {
-    "url": "https://github.com/sapegin/raccoon-vscode/issues"
-  },
+  "bugs": "https://github.com/sapegin/raccoon-vscode/issues",
   "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/sapegin/raccoon-vscode.git"
-  },
+  "repository": "https://github.com/sapegin/raccoon-vscode/tree/main/extensions/reveal-in-ghostty",
   "sponsor": {
     "url": "https://www.buymeacoffee.com/sapegin"
   },

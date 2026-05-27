@@ -16,15 +16,9 @@
     "log",
     "logging"
   ],
-  "homepage": "https://github.com/sapegin/raccoon-vscode/extensions/emoji-console-log",
-  "bugs": {
-    "url": "https://github.com/sapegin/raccoon-vscode/issues"
-  },
+  "bugs": "https://github.com/sapegin/raccoon-vscode/issues",
   "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/sapegin/raccoon-vscode"
-  },
+  "repository": "https://github.com/sapegin/raccoon-vscode/tree/main/extensions/emoji-console-log",
   "sponsor": {
     "url": "https://www.buymeacoffee.com/sapegin"
   },

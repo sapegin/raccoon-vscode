@@ -13,18 +13,12 @@
     "wrap",
     "wrapping"
   ],
-  "homepage": "https://github.com/sapegin/raccoon-vscode/extensions/grim-wrapper",
-  "bugs": {
-    "url": "https://github.com/sapegin/raccoon-vscode/issues"
-  },
+  "bugs": "https://github.com/sapegin/raccoon-vscode/issues",
   "license": "MIT",
   "author": {
     "name": "Artem Sapegin"
   },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/sapegin/raccoon-vscode"
-  },
+  "repository": "https://github.com/sapegin/raccoon-vscode/tree/main/extensions/grim-wrapper",
   "sponsor": {
     "url": "https://www.buymeacoffee.com/sapegin"
   },

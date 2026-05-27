@@ -15,15 +15,9 @@
     "keyword",
     "todo"
   ],
-  "homepage": "https://github.com/sapegin/raccoon-vscode/extensions/todo-tomorrow",
-  "bugs": {
-    "url": "https://github.com/sapegin/raccoon-vscode/issues"
-  },
+  "bugs": "https://github.com/sapegin/raccoon-vscode/issues",
   "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/sapegin/raccoon-vscode.git"
-  },
+  "repository": "https://github.com/sapegin/raccoon-vscode/tree/main/extensions/todo-tomorrow",
   "sponsor": {
     "url": "https://www.buymeacoffee.com/sapegin"
   },
