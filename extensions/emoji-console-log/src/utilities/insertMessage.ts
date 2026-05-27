@@ -481,9 +481,9 @@ export function insertMessage(
     const emptyBlockLine =
       logMessageInfo.type === LogMessageType.MultilineParenthesis
         ? document.lineAt(logMessageInfo.metadata.closingContextLine)
-        : (logMessageInfo.type === LogMessageType.NamedFunction
+        : logMessageInfo.type === LogMessageType.NamedFunction
           ? document.lineAt(logMessageInfo.metadata.line)
-          : undefined);
+          : undefined;
     if (emptyBlockLine) {
       return emptyBlockDebuggingMessage(
         editor,

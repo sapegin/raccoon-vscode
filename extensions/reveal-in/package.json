@@ -1,17 +1,18 @@
 {
-  "name": "reveal-in-ghostty",
-  "displayName": "Reveal in Ghostty",
-  "version": "1.1.0",
-  "description": "Reveal current project or folder in Ghostty",
+  "name": "reveal-in",
+  "displayName": "Reveal in…",
+  "version": "1.0.0",
+  "description": "Reveal current project or folder in external apps",
   "categories": [
     "Other"
   ],
   "keywords": [
     "app",
     "application",
-    "emulator",
     "external",
+    "file manager",
     "ghostty",
+    "nimble commander",
     "open",
     "reveal",
     "terminal"
@@ -19,7 +20,7 @@
   "bugs": "https://github.com/sapegin/raccoon-vscode/issues",
   "license": "MIT",
   "repository": {
-    "url": "https://github.com/sapegin/raccoon-vscode/tree/main/extensions/reveal-in-ghostty"
+    "url": "https://github.com/sapegin/raccoon-vscode/tree/main/extensions/reveal-in"
   },
   "sponsor": {
     "url": "https://www.buymeacoffee.com/sapegin"
@@ -35,20 +36,34 @@
   "contributes": {
     "commands": [
       {
-        "command": "revealInGhostty.revealProject",
+        "command": "revealIn.revealProjectGhostty",
         "title": "Reveal in Ghostty",
         "category": "Project"
       },
       {
-        "command": "revealInGhostty.revealFile",
+        "command": "revealIn.revealFileGhostty",
         "title": "Reveal in Ghostty",
+        "category": "File"
+      },
+      {
+        "command": "revealIn.revealProjectNimbleCommander",
+        "title": "Reveal in Nimble Commander",
+        "category": "Project"
+      },
+      {
+        "command": "revealIn.revealFileNimbleCommander",
+        "title": "Reveal in Nimble Commander",
         "category": "File"
       }
     ],
     "menus": {
       "explorer/context": [
         {
-          "command": "revealInGhostty.revealFile",
+          "command": "revealIn.revealFileGhostty",
+          "group": "navigation@21"
+        },
+        {
+          "command": "revealIn.revealFileNimbleCommander",
           "group": "navigation@21"
         }
       ]
@@ -56,9 +71,12 @@
   },
   "icon": "images/icon.png",
   "galleryBanner": {
-    "color": "#ddecff"
+    "color": "#ddd3ef"
   },
   "engines": {
     "vscode": "^1.75.0"
+  },
+  "vsce": {
+    "baseImagesUrl": "https://github.com/sapegin/raccoon-vscode/tree/main/extensions/reveal-in"
   }
 }

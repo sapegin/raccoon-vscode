@@ -1,10 +1,11 @@
-# Reveal in Ghostty 📂
+# Reveal in… 📂
 
-Reveal current project or folder in [Ghostty](https://ghostty.org/).
+Reveal current project or folder in external apps:
 
-**Install from [Visual Studio Marketplace](https://marketplace.visualstudio.com/items?itemName=sapegin.reveal-in-ghostty) or [Open VSX Registry](https://open-vsx.org/extension/sapegin/reveal-in-ghostty)**
+- [Ghostty](https://ghostty.org/)
+- [Nimble Commander](https://magnumbytes.com)
 
-![Reveal in Ghostty in Explorer context menu](screenshots/screenshot-explorer.png)
+![Reveal in Ghostty in Explorer context menu](./screenshots/screenshot-explorer.png)
 
 [![Washing your code. A book on clean code for frontend developers](https://sapegin.me/images/washing-code-github.jpg)](https://sapegin.me/book/)
 
@@ -14,12 +15,14 @@ Reveal current project or folder in [Ghostty](https://ghostty.org/).
 
 You can either run this commands from the Command Palette (<kbd>Cmd</kbd>+<kbd>Shift</kbd>+<kbd>P</kbd> on a Mac, or <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>P</kbd> on Windows), or [assign hotkeys](https://code.visualstudio.com/docs/getstarted/keybindings).
 
-| Description                  | Name                            |
-| ---------------------------- | ------------------------------- |
-| Reveal project root folder   | `revealInGhostty.revealProject` |
-| Reveal currently open folder | `revealInGhostty.revealFile`    |
+| Description | Name |
+| --- | --- |
+| Reveal project root folder in Ghostty | `revealIn.revealProjectGhostty` |
+| Reveal currently open folder in Ghostty | `revealIn.revealFileGhostty` |
+| Reveal project root folder in Nimble Commander | `revealIn.revealProjectNimbleCommander` |
+| Reveal currently open folder in Nimble Commander | `revealIn.revealFileNimbleCommander` |
 
-You can also access the "Reveal in Ghostty" command via Explorer context menu.
+You can also access the commands via Explorer context menu.
 
 ## Changelog
 
