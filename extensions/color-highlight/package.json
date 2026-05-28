@@ -13,6 +13,8 @@
     "decoration",
     "hex",
     "highlight",
+    "hsl",
+    "hsla",
     "rgb",
     "rgba"
   ],

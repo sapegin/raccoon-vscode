@@ -102,4 +102,46 @@ describe(findColors, () => {
       { color: '#abc', start: 26, end: 30 },
     ]);
   });
+
+  test('matches hsl() with comma syntax', () => {
+    expect(findColors('color: hsl(120, 100%, 50%);')).toStrictEqual([
+      { color: 'hsl(120, 100%, 50%)', start: 7, end: 26 },
+    ]);
+  });
+
+  test('matches hsla() with comma syntax and alpha', () => {
+    expect(findColors('color: hsla(120, 100%, 50%, 0.5);')).toStrictEqual([
+      { color: 'hsla(120, 100%, 50%, 0.5)', start: 7, end: 32 },
+    ]);
+  });
+
+  test('matches hsl() with whitespace syntax', () => {
+    expect(findColors('color: hsl(120 100% 50%);')).toStrictEqual([
+      { color: 'hsl(120 100% 50%)', start: 7, end: 24 },
+    ]);
+  });
+
+  test('matches hsl() with whitespace syntax and slash alpha', () => {
+    expect(findColors('color: hsl(120 100% 50% / 0.5);')).toStrictEqual([
+      { color: 'hsl(120 100% 50% / 0.5)', start: 7, end: 30 },
+    ]);
+  });
+
+  test('matches hsl() with deg unit on hue', () => {
+    expect(findColors('color: hsl(120deg 100% 50%);')).toStrictEqual([
+      { color: 'hsl(120deg 100% 50%)', start: 7, end: 27 },
+    ]);
+  });
+
+  test('matches hsl() with turn unit on hue', () => {
+    expect(findColors('color: hsl(0.5turn 100% 50%);')).toStrictEqual([
+      { color: 'hsl(0.5turn 100% 50%)', start: 7, end: 28 },
+    ]);
+  });
+
+  test('lowercases hsl keyword', () => {
+    expect(findColors('HSLA(120, 100%, 50%, 1)')).toStrictEqual([
+      { color: 'hsla(120, 100%, 50%, 1)', start: 0, end: 23 },
+    ]);
+  });
 });

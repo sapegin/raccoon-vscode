@@ -15,6 +15,21 @@ const RGB_COLOR_REGEXP = new RegExp(
   'gi'
 );
 
+// Matches CSS `hsl()` and `hsla()` colors in both the legacy comma syntax
+// (`hsl(120, 100%, 50%)`, `hsla(120, 100%, 50%, 0.5)`) and the modern
+// whitespace syntax (`hsl(120 100% 50%)`, `hsl(120deg 100% 50% / 50%)`). Hue
+// may carry a `deg`, `rad`, `grad`, or `turn` unit; saturation and lightness
+// are percentages; alpha may be a number or a percentage.
+const HSL_HUE = String.raw`-?\d*\.?\d+(?:deg|rad|grad|turn)?`;
+const HSL_PERCENT = String.raw`-?\d*\.?\d+%`;
+const HSL_ALPHA = String.raw`-?\d*\.?\d+%?`;
+const HSL_COLOR_REGEXP = new RegExp(
+  String.raw`hsla?\(\s*${HSL_HUE}\s*,\s*${HSL_PERCENT}\s*,\s*${HSL_PERCENT}(?:\s*,\s*${HSL_ALPHA})?\s*\)` +
+    '|' +
+    String.raw`hsla?\(\s*${HSL_HUE}\s+${HSL_PERCENT}\s+${HSL_PERCENT}(?:\s*\/\s*${HSL_ALPHA})?\s*\)`,
+  'gi'
+);
+
 export interface ColorMatch {
   /** The color value, lowercased. */
   color: string;
@@ -28,6 +43,7 @@ export function findColors(text: string): ColorMatch[] {
   const matches = [
     ...text.matchAll(HEX_COLOR_REGEXP),
     ...text.matchAll(RGB_COLOR_REGEXP),
+    ...text.matchAll(HSL_COLOR_REGEXP),
   ];
   return matches
     .map((match) => ({

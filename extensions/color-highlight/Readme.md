@@ -10,6 +10,7 @@ Visual Studio Code extension that underlines color values with the actual color.
 - Supports:
   - hex color values (`#f00`, `#FF0000`, `#f00c`, `#ff0000cc`)
   - RGB(A) color values (`rgb(255, 0, 0)`, `rgba(255, 0, 0, 0.5)`, `rgb(255 0 0 / 50%)`)
+  - HSL(A) color values (`hsl(120, 100%, 50%)`, `hsla(120, 100%, 50%, 0.5)`, `hsl(120deg 100% 50% / 50%)`)
 - Works in all file types.
 
 ## Changelog
