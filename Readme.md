@@ -7,6 +7,7 @@ Monorepo of [Artem Sapegin](https://sapegin.me/)’s Visual Studio Code extensio
 ## Extensions
 
 - [backticker](extensions/backticker): Automatically converts strings to template strings when you type `${`.
+- [color-highlight](extensions/color-highlight): Underlines hex color values with the actual color.
 - [emoji-console-log](extensions/emoji-console-log): Inserts `console.log()` statements with a random emoji.
 - [grim-wrapper](extensions/grim-wrapper): Minimalist comment, Markdown, and plain text wrapping.
 - [just-blame](extensions/just-blame): Git Blame annotations sidebar, inspired by JetBrains editors.
