@@ -1,0 +1,57 @@
+{
+  "name": "backticker",
+  "displayName": "Backticker",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Automatically converts regular strings to template strings when you type ${",
+  "categories": [
+    "Other"
+  ],
+  "keywords": [
+    "backtick",
+    "javascript",
+    "jsx",
+    "string",
+    "template literal",
+    "template string",
+    "typescript"
+  ],
+  "bugs": "https://github.com/sapegin/raccoon-vscode/issues",
+  "license": "MIT",
+  "author": {
+    "name": "Artem Sapegin"
+  },
+  "repository": {
+    "url": "https://github.com/sapegin/raccoon-vscode/tree/main/extensions/backticker"
+  },
+  "sponsor": {
+    "url": "https://www.buymeacoffee.com/sapegin"
+  },
+  "publisher": "sapegin",
+  "main": "out/extension.js",
+  "scripts": {
+    "dev": "node ../../esbuild.config.mjs",
+    "build": "node ../../esbuild.config.mjs production",
+    "publish": "vsce publish",
+    "publish:ovsx": "npx ovsx publish"
+  },
+  "contributes": {},
+  "activationEvents": [
+    "onLanguage:javascript",
+    "onLanguage:javascriptreact",
+    "onLanguage:typescript",
+    "onLanguage:typescriptreact"
+  ],
+  "icon": "images/icon.png",
+  "galleryBanner": {
+    "color": "#f5d7f3"
+  },
+  "engines": {
+    "vscode": "^1.75.0"
+  },
+  "capabilities": {
+    "untrustedWorkspaces": {
+      "supported": true
+    }
+  }
+}
