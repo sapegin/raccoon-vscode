@@ -6,7 +6,7 @@ import {
   type TextEditor,
   type TextEditorDecorationType,
 } from 'vscode';
-import { findHexColors } from './colors';
+import { findColors } from './colors';
 
 const decorationTypes = new Map<string, TextEditorDecorationType>();
 
@@ -26,7 +26,7 @@ function getDecorationType(color: string): TextEditorDecorationType {
 
 function decorate(editor: TextEditor): void {
   const text = editor.document.getText();
-  const matches = findHexColors(text);
+  const matches = findColors(text);
 
   const rangesByColor = new Map<string, Range[]>();
   for (const { color, start, end } of matches) {

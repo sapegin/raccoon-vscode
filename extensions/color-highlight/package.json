@@ -3,7 +3,7 @@
   "displayName": "Color Highlight",
   "version": "1.0.0",
   "private": true,
-  "description": "Underlines hex color values with the actual color",
+  "description": "Underlines color values with the actual color",
   "categories": [
     "Other"
   ],
@@ -12,7 +12,9 @@
     "css",
     "decoration",
     "hex",
-    "highlight"
+    "highlight",
+    "rgb",
+    "rgba"
   ],
   "bugs": "https://github.com/sapegin/raccoon-vscode/issues",
   "license": "MIT",
