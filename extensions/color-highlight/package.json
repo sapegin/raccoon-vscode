@@ -1,0 +1,52 @@
+{
+  "name": "color-highlight",
+  "displayName": "Color Highlight",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Underlines hex color values with the actual color",
+  "categories": [
+    "Other"
+  ],
+  "keywords": [
+    "color",
+    "css",
+    "decoration",
+    "hex",
+    "highlight"
+  ],
+  "bugs": "https://github.com/sapegin/raccoon-vscode/issues",
+  "license": "MIT",
+  "author": {
+    "name": "Artem Sapegin"
+  },
+  "repository": {
+    "url": "https://github.com/sapegin/raccoon-vscode/tree/main/extensions/color-highlight"
+  },
+  "sponsor": {
+    "url": "https://www.buymeacoffee.com/sapegin"
+  },
+  "publisher": "sapegin",
+  "main": "out/extension.js",
+  "scripts": {
+    "dev": "node ../../esbuild.config.mjs",
+    "build": "node ../../esbuild.config.mjs production",
+    "publish": "vsce publish",
+    "publish:ovsx": "npx ovsx publish"
+  },
+  "contributes": {},
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "icon": "images/icon.png",
+  "galleryBanner": {
+    "color": "#f5d7e8"
+  },
+  "engines": {
+    "vscode": "^1.75.0"
+  },
+  "capabilities": {
+    "untrustedWorkspaces": {
+      "supported": true
+    }
+  }
+}
