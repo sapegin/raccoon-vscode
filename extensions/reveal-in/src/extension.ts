@@ -68,7 +68,7 @@ async function revealProjectInApp(app: string) {
   await openPathInApp(app, projectPath);
 }
 
-async function revealProjectViaCli(app: string, cli: string, arg: string) {
+async function revealProjectViaCli(app: string, cli: string, arg?: string) {
   const { uri } = window.activeTextEditor?.document ?? {};
   const projectPath = getProjectPath(uri);
   if (projectPath === undefined) {
@@ -79,7 +79,7 @@ async function revealProjectViaCli(app: string, cli: string, arg: string) {
   logMessage(`Reveal project in ${app}`, projectPath);
 
   try {
-    await execFileAsync(cli, [arg, projectPath]);
+    await execFileAsync(cli, arg ? [arg, projectPath] : [projectPath]);
   } catch (error) {
     logMessage(`Cannot open ${app}:`, error);
     if (error instanceof Error) {
@@ -106,6 +106,9 @@ export function activate(context: ExtensionContext) {
     }),
     commands.registerCommand('revealIn.revealProjectNimbleCommander', () => {
       return revealProjectInApp('Nimble Commander');
+    }),
+    commands.registerCommand('revealIn.revealProjectSublimeMerge', () => {
+      return revealProjectViaCli('Sublime Merge', 'smerge');
     })
   );
 }

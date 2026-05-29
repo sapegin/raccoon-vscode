@@ -59,6 +59,11 @@
         "command": "revealIn.revealFileNimbleCommander",
         "title": "Reveal in Nimble Commander",
         "category": "File"
+      },
+      {
+        "command": "revealIn.revealProjectSublimeMerge",
+        "title": "Reveal in Sublime Merge",
+        "category": "Project"
       }
     ],
     "menus": {

@@ -23,6 +23,7 @@ You can either run this commands from the Command Palette (<kbd>Cmd</kbd>+<kbd>S
 | `revealIn.revealProjectGitHubDesktop` | Reveal project root folder in GitHub Desktop |
 | `revealIn.revealProjectNimbleCommander` | Reveal project root folder in Nimble Commander |
 | `revealIn.revealFileNimbleCommander` | Reveal currently open folder in Nimble Commander |
+| `revealIn.revealProjectSublimeMerge` | Reveal project root folder in Sublime Merge |
 
 You can also access the commands via Explorer context menu.
 
