@@ -1,0 +1,63 @@
+{
+  "name": "file-operations",
+  "displayName": "File Operations",
+  "version": "1.0.0",
+  "description": "Common file operations on the active file: rename, duplicate, delete, copy name",
+  "categories": [
+    "Other"
+  ],
+  "keywords": [
+    "copy",
+    "delete",
+    "duplicate",
+    "file",
+    "rename"
+  ],
+  "bugs": "https://github.com/sapegin/raccoon-vscode/issues",
+  "license": "MIT",
+  "repository": {
+    "url": "https://github.com/sapegin/raccoon-vscode/tree/main/extensions/file-operations"
+  },
+  "sponsor": {
+    "url": "https://www.buymeacoffee.com/sapegin"
+  },
+  "publisher": "sapegin",
+  "main": "out/extension.js",
+  "scripts": {
+    "dev": "node ../../esbuild.config.mjs",
+    "build": "node ../../esbuild.config.mjs production",
+    "publish": "vsce publish",
+    "publish:ovsx": "npx ovsx publish"
+  },
+  "contributes": {
+    "commands": [
+      {
+        "command": "fileOperations.renameFile",
+        "category": "File",
+        "title": "Rename…"
+      },
+      {
+        "command": "fileOperations.duplicateFile",
+        "category": "File",
+        "title": "Duplicate…"
+      },
+      {
+        "command": "fileOperations.removeFile",
+        "category": "File",
+        "title": "Delete"
+      },
+      {
+        "command": "fileOperations.copyFileName",
+        "category": "File",
+        "title": "Copy Name of Active File"
+      }
+    ]
+  },
+  "icon": "images/icon.png",
+  "galleryBanner": {
+    "color": "#faf5ea"
+  },
+  "engines": {
+    "vscode": "^1.75.0"
+  }
+}
