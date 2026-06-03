@@ -68,17 +68,17 @@
       {
         "key": "enter",
         "command": "miniMarkdown.onEnterKey",
-        "when": "editorTextFocus && !editorReadonly && editorLangId == markdown && (!suggestWidgetVisible || config.editor.acceptSuggestionOnEnter == 'off') && !editorHasMultipleSelections"
+        "when": "editorTextFocus && !editorReadonly && editorLangId == markdown && !suggestWidgetVisible && !editorHasMultipleSelections"
       },
       {
         "key": "tab",
         "command": "miniMarkdown.onTabKey",
-        "when": "editorTextFocus && !editorReadonly && editorLangId == markdown && (!suggestWidgetVisible || config.editor.acceptSuggestionOnEnter == 'off') && !editorHasMultipleSelections"
+        "when": "editorTextFocus && !editorReadonly && editorLangId == markdown && !suggestWidgetVisible && !editorHasMultipleSelections"
       },
       {
         "key": "shift+tab",
         "command": "miniMarkdown.onShiftTabKey",
-        "when": "editorTextFocus && !editorReadonly && editorLangId == markdown && (!suggestWidgetVisible || config.editor.acceptSuggestionOnEnter == 'off') && !editorHasMultipleSelections"
+        "when": "editorTextFocus && !editorReadonly && editorLangId == markdown && !suggestWidgetVisible && !editorHasMultipleSelections"
       }
     ]
   },
