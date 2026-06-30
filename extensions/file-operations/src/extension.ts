@@ -32,6 +32,19 @@ function getBaseNameSelection(fileName: string): [number, number] {
   return [0, fileName.length - extension.length];
 }
 
+/** True when paths differ only by letter casing (README.md → Readme.md). */
+function isCaseOnlyPathChange(oldPath: string, newPath: string): boolean {
+  return oldPath !== newPath && oldPath.toLowerCase() === newPath.toLowerCase();
+}
+
+/** Temp name for a two-step rename on case-insensitive file systems. */
+function getCaseRenameTempPath(filePath: string): string {
+  return path.join(
+    path.dirname(filePath),
+    `.${path.basename(filePath)}.${Date.now()}.rename-tmp`
+  );
+}
+
 async function renameFile() {
   const uri = getActiveFileUri();
   if (uri === undefined) {
@@ -53,7 +66,24 @@ async function renameFile() {
 
   try {
     const edit = new WorkspaceEdit();
-    edit.renameFile(uri, newUri, { overwrite: false, ignoreIfExists: false });
+    if (isCaseOnlyPathChange(uri.fsPath, newUri.fsPath)) {
+      // On case-insensitive volumes (macOS default), README.md and Readme.md
+      // resolve to the same inode, so a single WorkspaceEdit.renameFile is a
+      // no-op. Instead, we do a two-step rename through a temporary hidden file
+      // in the same directory, still via WorkspaceEdit so TypeScript and other
+      // language services can update imports.
+      const tempUri = Uri.file(getCaseRenameTempPath(uri.fsPath));
+      edit.renameFile(uri, tempUri, {
+        overwrite: false,
+        ignoreIfExists: false,
+      });
+      edit.renameFile(tempUri, newUri, {
+        overwrite: false,
+        ignoreIfExists: false,
+      });
+    } else {
+      edit.renameFile(uri, newUri, { overwrite: false, ignoreIfExists: false });
+    }
     const ok = await workspace.applyEdit(edit);
     if (ok === false) {
       window.showErrorMessage(`Can’t rename to ${newName}`);
