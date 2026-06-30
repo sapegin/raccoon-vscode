@@ -2,19 +2,19 @@ import path from 'node:path';
 import {
   commands,
   env,
-  Uri,
   window,
   workspace,
   WorkspaceEdit,
   type ExtensionContext,
 } from 'vscode';
 import { logMessage } from './debug';
+import { renameFile, withFileName } from './rename';
 
 /**
  * Return the URI of the active editor’s file, or `undefined` and show a warning
  * if the active document isn’t a file on disk.
  */
-function getActiveFileUri(): Uri | undefined {
+function getActiveFileUri() {
   const uri = window.activeTextEditor?.document.uri;
   if (uri?.scheme !== 'file') {
     window.showWarningMessage('Open a file to use this command');
@@ -30,70 +30,6 @@ function getActiveFileUri(): Uri | undefined {
 function getBaseNameSelection(fileName: string): [number, number] {
   const extension = path.extname(fileName);
   return [0, fileName.length - extension.length];
-}
-
-/** True when paths differ only by letter casing (README.md → Readme.md). */
-function isCaseOnlyPathChange(oldPath: string, newPath: string): boolean {
-  return oldPath !== newPath && oldPath.toLowerCase() === newPath.toLowerCase();
-}
-
-/** Temp name for a two-step rename on case-insensitive file systems. */
-function getCaseRenameTempPath(filePath: string): string {
-  return path.join(
-    path.dirname(filePath),
-    `.${path.basename(filePath)}.${Date.now()}.rename-tmp`
-  );
-}
-
-async function renameFile() {
-  const uri = getActiveFileUri();
-  if (uri === undefined) {
-    return;
-  }
-
-  const oldName = path.basename(uri.fsPath);
-  const newName = await window.showInputBox({
-    prompt: 'New file name',
-    value: oldName,
-    valueSelection: getBaseNameSelection(oldName),
-  });
-  if (newName === undefined || newName === '' || newName === oldName) {
-    return;
-  }
-
-  const newUri = Uri.file(path.join(path.dirname(uri.fsPath), newName));
-  logMessage('Renaming:', uri.fsPath, '→', newUri.fsPath);
-
-  try {
-    const edit = new WorkspaceEdit();
-    if (isCaseOnlyPathChange(uri.fsPath, newUri.fsPath)) {
-      // On case-insensitive volumes (macOS default), README.md and Readme.md
-      // resolve to the same inode, so a single WorkspaceEdit.renameFile is a
-      // no-op. Instead, we do a two-step rename through a temporary hidden file
-      // in the same directory, still via WorkspaceEdit so TypeScript and other
-      // language services can update imports.
-      const tempUri = Uri.file(getCaseRenameTempPath(uri.fsPath));
-      edit.renameFile(uri, tempUri, {
-        overwrite: false,
-        ignoreIfExists: false,
-      });
-      edit.renameFile(tempUri, newUri, {
-        overwrite: false,
-        ignoreIfExists: false,
-      });
-    } else {
-      edit.renameFile(uri, newUri, { overwrite: false, ignoreIfExists: false });
-    }
-    const ok = await workspace.applyEdit(edit);
-    if (ok === false) {
-      window.showErrorMessage(`Can’t rename to ${newName}`);
-    }
-  } catch (error) {
-    if (error instanceof Error) {
-      logMessage('Can’t rename file:', error.message);
-      window.showErrorMessage(`Can’t rename to ${newName}`);
-    }
-  }
 }
 
 async function duplicateFile() {
@@ -116,7 +52,7 @@ async function duplicateFile() {
     return;
   }
 
-  const newUri = Uri.file(path.join(path.dirname(uri.fsPath), newName));
+  const newUri = withFileName(uri, newName);
   logMessage('Duplicating:', uri.fsPath, '→', newUri.fsPath);
 
   try {
@@ -178,7 +114,12 @@ export function activate(context: ExtensionContext) {
   logMessage('💾 File Operations starting…');
 
   context.subscriptions.push(
-    commands.registerCommand('fileOperations.renameFile', renameFile),
+    commands.registerCommand('fileOperations.renameFile', async () => {
+      const uri = getActiveFileUri();
+      if (uri !== undefined) {
+        await renameFile(uri);
+      }
+    }),
     commands.registerCommand('fileOperations.duplicateFile', duplicateFile),
     commands.registerCommand('fileOperations.removeFile', removeFile),
     commands.registerCommand('fileOperations.copyFileName', copyFileName)
