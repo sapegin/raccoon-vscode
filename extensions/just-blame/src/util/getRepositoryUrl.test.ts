@@ -15,6 +15,7 @@ type ExecFileMock = (
 
 const execFileMock = vi.hoisted(() => vi.fn<ExecFileMock>());
 
+// oxlint-disable-next-line unicorn/import-style
 vi.mock(import('node:child_process'), async (importOriginal) => {
   const actual = await importOriginal();
   return {

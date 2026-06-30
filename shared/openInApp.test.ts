@@ -8,6 +8,7 @@ type OpenImplementation = (
 
 const openImplementation = vi.hoisted(() => vi.fn<OpenImplementation>());
 
+// oxlint-disable-next-line unicorn/import-style
 vi.mock(import('node:child_process'), async (importOriginal) => {
   const actual = await importOriginal();
   // Stub `execFile` and attach a `[promisify.custom]` implementation so
