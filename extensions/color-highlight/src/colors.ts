@@ -1,7 +1,8 @@
 // Matches hex colors of 3, 4, 6, or 8 digits. The trailing negative lookahead
-// prevents partial matches like `#fffff` (5 digits) being matched as `#fff`.
+// prevents partial matches like `#fffff` (5 digits) being matched as `#fff`,
+// and rejects hex-like runs inside words (e.g. `#defa` in `#defaults`).
 const HEX_COLOR_REGEXP =
-  /#(?:[0-9a-fA-F]{8}|[0-9a-fA-F]{6}|[0-9a-fA-F]{4}|[0-9a-fA-F]{3})(?![0-9a-fA-F])/g;
+  /#(?:[0-9a-fA-F]{8}|[0-9a-fA-F]{6}|[0-9a-fA-F]{4}|[0-9a-fA-F]{3})(?![0-9a-zA-Z])/g;
 
 // Matches CSS `rgb()` and `rgba()` colors in both the legacy comma syntax
 // (`rgb(255, 0, 0)`, `rgba(255, 0, 0, 0.5)`) and the modern whitespace syntax

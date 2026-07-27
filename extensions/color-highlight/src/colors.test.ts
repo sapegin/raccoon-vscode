@@ -47,10 +47,12 @@ describe(findColors, () => {
     expect(findColors('#1234567')).toStrictEqual([]);
   });
 
-  test('rejects non-hex characters following the color', () => {
-    expect(findColors('#fffzzz')).toStrictEqual([
-      { color: '#fff', start: 0, end: 4 },
-    ]);
+  test('rejects hex-like sequences embedded in words', () => {
+    expect(findColors('#defaults write')).toStrictEqual([]);
+  });
+
+  test('rejects hex-like sequences followed by letters', () => {
+    expect(findColors('#fffzzz')).toStrictEqual([]);
   });
 
   test('matches rgb() with comma syntax', () => {
