@@ -1,6 +1,12 @@
 import fs from 'node:fs';
 import path from 'node:path';
-import { window, type QuickPickItem, type QuickPick, Uri } from 'vscode';
+import {
+  commands,
+  window,
+  type QuickPickItem,
+  type QuickPick,
+  Uri,
+} from 'vscode';
 import { logMessage } from './debug';
 
 // Octicons icons: https://code.visualstudio.com/api/references/icons-in-labels
@@ -60,9 +66,9 @@ export default class Picker {
         return;
       }
 
-      // There seem to be no API to reveal a folder in Explorer,
-      // so show a notification instead
-      window.showInformationMessage(`Folder created: ${relativePath}`);
+      // There seem to be no API to reveal a folder in Explorer, but VS Code
+      // provides the built-in revealInExplorer command
+      await commands.executeCommand('revealInExplorer', Uri.file(fullPath));
     } else {
       // User types a file name: foo/bar.ext
 
