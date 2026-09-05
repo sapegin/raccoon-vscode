@@ -1,0 +1,99 @@
+{
+  "name": "git-navigator",
+  "displayName": "Git Navigator",
+  "version": "1.0.0",
+  "description": "Navigate Git changes across files in the single-file diff editor",
+  "categories": [
+    "Other"
+  ],
+  "keywords": [
+    "changes",
+    "diff",
+    "git",
+    "navigation",
+    "source control"
+  ],
+  "bugs": "https://github.com/sapegin/raccoon-vscode/issues",
+  "license": "MIT",
+  "repository": {
+    "url": "https://github.com/sapegin/raccoon-vscode/tree/main/extensions/git-navigator"
+  },
+  "sponsor": {
+    "url": "https://www.buymeacoffee.com/sapegin"
+  },
+  "publisher": "sapegin",
+  "main": "out/extension.js",
+  "scripts": {
+    "dev": "node ../../esbuild.config.mjs",
+    "build": "node ../../esbuild.config.mjs production",
+    "publish": "vsce publish",
+    "publish:ovsx": "npx ovsx publish"
+  },
+  "contributes": {
+    "commands": [
+      {
+        "command": "gitNavigator.nextChange",
+        "title": "Git Navigator: Go to Next Change"
+      },
+      {
+        "command": "gitNavigator.previousChange",
+        "title": "Git Navigator: Go to Previous Change"
+      }
+    ],
+    "keybindings": [
+      {
+        "command": "gitNavigator.nextChange",
+        "key": "ctrl+shift+down",
+        "mac": "cmd+shift+down",
+        "when": "editorTextFocus && !isEmbeddedDiffEditor"
+      },
+      {
+        "command": "gitNavigator.previousChange",
+        "key": "ctrl+shift+up",
+        "mac": "cmd+shift+up",
+        "when": "editorTextFocus && !isEmbeddedDiffEditor"
+      }
+    ],
+    "configuration": {
+      "title": "Git Navigator",
+      "properties": {
+        "gitNavigator.ignoredFiles": {
+          "description": "File names or repository-relative paths to exclude from navigation",
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "uniqueItems": true,
+          "default": [
+            "bun.lock",
+            "bun.lockb",
+            "Cargo.lock",
+            "composer.lock",
+            "deno.lock",
+            "flake.lock",
+            "Gemfile.lock",
+            "mix.lock",
+            "npm-shrinkwrap.json",
+            "package-lock.json",
+            "Package.resolved",
+            "packages.lock.json",
+            "Pipfile.lock",
+            "pnpm-lock.yaml",
+            "Podfile.lock",
+            "poetry.lock",
+            "pubspec.lock",
+            "uv.lock",
+            "yarn.lock"
+          ]
+        }
+      }
+    }
+  },
+  "icon": "images/icon.png",
+  "galleryBanner": {
+    "color": "#e3d2eb"
+  },
+  "engines": {
+    "vscode": "^1.75.0"
+  }
+}

@@ -1,3 +1,5 @@
+Ecosystem context: read `~/dotfiles/ai/raccoonarium.md`.
+
 Monorepo of Visual Studio Code extensions. One workspace per extension under `extensions/<id>/`.
 
 ## Extension contract
