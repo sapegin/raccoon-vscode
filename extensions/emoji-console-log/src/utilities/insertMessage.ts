@@ -351,23 +351,36 @@ function isArrowFunctionArgumentContext(
   );
 }
 
-function isEmptyBlockContext(
-  document: TextDocument,
+function isClosingLineWithEmptyBlock(line: TextLine) {
+  return /\){.*}/.test(line.text.replaceAll(/\s/g, ''));
+}
+
+function getEmptyBlockClosingLineNumber(
   logMessage: LogMessageInfo
-) {
+): number | undefined {
   if (logMessage.type === LogMessageType.MultilineParenthesis) {
-    return /\){.*}/.test(
-      document
-        .lineAt(logMessage.metadata.closingContextLine)
-        .text.replaceAll(/\s/g, '')
-    );
+    return logMessage.metadata.closingContextLine;
   }
   if (logMessage.type === LogMessageType.NamedFunction) {
-    return /\){.*}/.test(
-      document.lineAt(logMessage.metadata.line).text.replaceAll(/\s/g, '')
-    );
+    return logMessage.metadata.line;
   }
-  return false;
+  return undefined;
+}
+
+function findEmptyBlockClosingLine(
+  document: TextDocument,
+  logMessage: LogMessageInfo
+): TextLine | undefined {
+  const lineNumber = getEmptyBlockClosingLineNumber(logMessage);
+  if (lineNumber === undefined) {
+    return undefined;
+  }
+
+  const line = document.lineAt(lineNumber);
+  if (!isClosingLineWithEmptyBlock(line)) {
+    return undefined;
+  }
+  return line;
 }
 
 async function emptyBlockDebuggingMessage(
@@ -377,7 +390,7 @@ async function emptyBlockDebuggingMessage(
   debuggingMessage: string,
   spacesBeforeMessage: string
 ) {
-  if (/\){.*}/.test(emptyBlockLine.text.replaceAll(/\s/g, ''))) {
+  if (isClosingLineWithEmptyBlock(emptyBlockLine)) {
     const textBeforeClosedFunctionParenthesis =
       emptyBlockLine.text.split(')')[0];
     await editor.edit((textEdit) => {
@@ -475,25 +488,20 @@ export function insertMessage(
     );
   }
 
-  if (isEmptyBlockContext(document, logMessageInfo)) {
+  const emptyBlockClosingLine = findEmptyBlockClosingLine(
+    document,
+    logMessageInfo
+  );
+  if (emptyBlockClosingLine) {
     logDebugMessage('Empty block context');
 
-    const emptyBlockLine =
-      logMessageInfo.type === LogMessageType.MultilineParenthesis
-        ? document.lineAt(logMessageInfo.metadata.closingContextLine)
-        : logMessageInfo.type === LogMessageType.NamedFunction
-          ? document.lineAt(logMessageInfo.metadata.line)
-          : undefined;
-    if (emptyBlockLine) {
-      return emptyBlockDebuggingMessage(
-        editor,
-        emptyBlockLine,
-        lineOfLogMessage,
-        debuggingMessageContent,
-        spacesBeforeMessage
-      );
-    }
-    return Promise.resolve();
+    return emptyBlockDebuggingMessage(
+      editor,
+      emptyBlockClosingLine,
+      lineOfLogMessage,
+      debuggingMessageContent,
+      spacesBeforeMessage
+    );
   }
 
   if (
