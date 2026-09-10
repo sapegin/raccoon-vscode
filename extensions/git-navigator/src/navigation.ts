@@ -70,15 +70,45 @@ export function isIgnoredPath(
   );
 }
 
-/** Returns whether VS Code's file-local diff navigation wrapped around. */
-export function didNavigationWrap(
-  direction: NavigationDirection,
-  beforeLine: number,
-  afterLine: number
-): boolean {
-  return direction === 'next'
-    ? afterLine <= beforeLine
-    : afterLine >= beforeLine;
+export interface AdjacentFileContext {
+  direction: NavigationDirection;
+  beforeLine: number;
+  afterLine: number;
+  lineCount: number;
+  currentChangeIndex: number;
+  changeCount: number;
+}
+
+/**
+ * Returns whether file-local navigation hit a file boundary and should continue
+ * in the next file.
+ */
+export function shouldOpenAdjacentFile(context: AdjacentFileContext): boolean {
+  const {
+    direction,
+    beforeLine,
+    afterLine,
+    lineCount,
+    currentChangeIndex,
+    changeCount,
+  } = context;
+  const lastLine = lineCount - 1;
+
+  if (direction === 'next') {
+    return (
+      afterLine < beforeLine ||
+      (afterLine === beforeLine &&
+        (beforeLine >= lastLine ||
+          (beforeLine === 0 &&
+            currentChangeIndex >= 0 &&
+            currentChangeIndex < changeCount - 1)))
+    );
+  }
+
+  return (
+    afterLine > beforeLine ||
+    (afterLine === beforeLine && beforeLine <= 0 && currentChangeIndex > 0)
+  );
 }
 
 /** Finds the adjacent path, including when the current change was just removed. */

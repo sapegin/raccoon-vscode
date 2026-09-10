@@ -11,8 +11,8 @@ import {
 } from 'vscode';
 import {
   compareSourceControlPaths,
-  didNavigationWrap,
   getAdjacentPath,
+  shouldOpenAdjacentFile,
   isIgnoredPath,
   normalizePath,
   type NavigationDirection,
@@ -80,8 +80,6 @@ function containsPath(rootPath: string, filePath: string): boolean {
 export class Navigator {
   readonly #getGitApi: () => Promise<GitApi | undefined>;
   #pendingNavigation = Promise.resolve();
-  /** Prevents an immediate cross-file bounce after entering a file. */
-  #suppressAdjacentPath: string | undefined;
 
   public constructor(getGitApi: () => Promise<GitApi | undefined>) {
     this.#getGitApi = getGitApi;
@@ -130,27 +128,36 @@ export class Navigator {
     }
 
     const beforeLine = modifiedEditor.selection.active.line;
+    const lineCount = modifiedEditor.document.lineCount;
     await commands.executeCommand(commandsByDirection[direction]);
 
     const activeInput = getActiveDiffInput();
     const activeEditor = activeInput && getVisibleEditor(activeInput.modified);
+    const changes = await this.getChanges(input.modified.fsPath);
+    const changePaths = changes.map((change) => change.uri.fsPath);
+    const currentChangeIndex = changePaths.findIndex(
+      (changePath) =>
+        normalizePath(changePath) === normalizePath(input.modified.fsPath)
+    );
+
     if (
       activeInput === undefined ||
       activeEditor === undefined ||
       activeInput.modified.toString() !== input.modified.toString() ||
-      didNavigationWrap(
+      shouldOpenAdjacentFile({
         direction,
         beforeLine,
-        activeEditor.selection.active.line
-      ) === false
+        afterLine: activeEditor.selection.active.line,
+        lineCount,
+        currentChangeIndex,
+        changeCount: changes.length,
+      }) === false
     ) {
-      this.#suppressAdjacentPath = undefined;
       return;
     }
 
-    const changes = await this.getChanges(input.modified.fsPath);
     const adjacentPath = getAdjacentPath(
-      changes.map((change) => change.uri.fsPath),
+      changePaths,
       input.modified.fsPath,
       direction
     );
@@ -158,11 +165,6 @@ export class Navigator {
       adjacentPath === undefined ||
       normalizePath(adjacentPath) === normalizePath(input.modified.fsPath)
     ) {
-      return;
-    }
-
-    if (normalizePath(adjacentPath) === this.#suppressAdjacentPath) {
-      this.#suppressAdjacentPath = undefined;
       return;
     }
 
@@ -202,7 +204,6 @@ export class Navigator {
       return;
     }
 
-    this.#suppressAdjacentPath = normalizePath(currentUri.fsPath);
     await commands.executeCommand('git.openChange', adjacentChange.uri);
     await this.revealBoundaryChange(direction, adjacentChange.uri);
   }

@@ -300,7 +300,7 @@ describe(Navigator, () => {
     expect(commandCalls('git.openChange')).toHaveLength(0);
   });
 
-  test('does not immediately bounce back to the previous file', async () => {
+  test('crosses to the previous file after forward entry', async () => {
     setDiffTab('/project/new.ts', 0);
     executeCommand.mockImplementation((command, uri) => {
       if (command === 'workbench.action.compareEditor.nextChange') {
@@ -311,8 +311,53 @@ describe(Navigator, () => {
         return Promise.resolve();
       }
 
+      if (command === 'workbench.action.compareEditor.previousChange') {
+        const activeEditor = vscodeState.visibleTextEditors[0];
+        if (activeEditor !== undefined) {
+          activeEditor.selection.active.line = 90;
+        }
+        return Promise.resolve();
+      }
+
       if (command === 'git.openChange') {
-        setDiffTab((uri as MockUri).fsPath, 10);
+        setDiffTab((uri as MockUri).fsPath, 0);
+      }
+      return Promise.resolve();
+    });
+
+    const navigator = createNavigator(['/project/new.ts', '/project/other.ts']);
+    await navigator.enqueue('next');
+    expectGitOpenChange('/project/other.ts');
+    executeCommand.mockClear();
+
+    await navigator.enqueue('previous');
+    expect(commandCalls('git.openChange')).toStrictEqual([
+      [
+        'git.openChange',
+        expect.objectContaining({ fsPath: '/project/new.ts' }),
+      ],
+    ]);
+  });
+
+  test('stays on a file when the first hunk has more changes ahead', async () => {
+    setDiffTab('/project/new.ts', 0);
+    executeCommand.mockImplementation((command, uri) => {
+      if (command === 'workbench.action.compareEditor.nextChange') {
+        const activeEditor = vscodeState.visibleTextEditors[0];
+        if (activeEditor === undefined) {
+          return Promise.resolve();
+        }
+
+        if (activeEditor.document.uri.fsPath.endsWith('new.ts')) {
+          activeEditor.selection.active.line = 0;
+        } else {
+          activeEditor.selection.active.line = 10;
+        }
+        return Promise.resolve();
+      }
+
+      if (command === 'git.openChange') {
+        setDiffTab((uri as MockUri).fsPath, 0);
       }
       return Promise.resolve();
     });
@@ -324,6 +369,7 @@ describe(Navigator, () => {
     executeCommand.mockClear();
     await navigator.enqueue('next');
     expect(commandCalls('git.openChange')).toHaveLength(0);
+    expect(vscodeState.visibleTextEditors[0]?.selection.active.line).toBe(10);
   });
 
   test('reads the Git API again when it becomes available later', async () => {

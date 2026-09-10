@@ -1,8 +1,8 @@
 import { describe, expect, test } from 'vitest';
 import {
   compareSourceControlPaths,
-  didNavigationWrap,
   getAdjacentPath,
+  shouldOpenAdjacentFile,
   isIgnoredPath,
 } from './navigation';
 
@@ -47,17 +47,121 @@ describe(isIgnoredPath, () => {
   });
 });
 
-describe(didNavigationWrap, () => {
-  test('detects forward wrapping and a single remaining hunk', () => {
-    expect(didNavigationWrap('next', 20, 5)).toBe(true);
-    expect(didNavigationWrap('next', 20, 20)).toBe(true);
-    expect(didNavigationWrap('next', 20, 30)).toBe(false);
+describe(shouldOpenAdjacentFile, () => {
+  test('continues forward after wrapping or reaching the file end', () => {
+    expect(
+      shouldOpenAdjacentFile({
+        direction: 'next',
+        beforeLine: 20,
+        afterLine: 5,
+        lineCount: 100,
+        currentChangeIndex: 1,
+        changeCount: 3,
+      })
+    ).toBe(true);
+    expect(
+      shouldOpenAdjacentFile({
+        direction: 'next',
+        beforeLine: 99,
+        afterLine: 99,
+        lineCount: 100,
+        currentChangeIndex: 1,
+        changeCount: 3,
+      })
+    ).toBe(true);
+    expect(
+      shouldOpenAdjacentFile({
+        direction: 'next',
+        beforeLine: 0,
+        afterLine: 0,
+        lineCount: 1,
+        currentChangeIndex: 0,
+        changeCount: 2,
+      })
+    ).toBe(true);
+    expect(
+      shouldOpenAdjacentFile({
+        direction: 'next',
+        beforeLine: 0,
+        afterLine: 0,
+        lineCount: 100,
+        currentChangeIndex: 0,
+        changeCount: 2,
+      })
+    ).toBe(true);
+    expect(
+      shouldOpenAdjacentFile({
+        direction: 'next',
+        beforeLine: 0,
+        afterLine: 0,
+        lineCount: 100,
+        currentChangeIndex: 1,
+        changeCount: 2,
+      })
+    ).toBe(false);
+    expect(
+      shouldOpenAdjacentFile({
+        direction: 'next',
+        beforeLine: 20,
+        afterLine: 30,
+        lineCount: 100,
+        currentChangeIndex: 1,
+        changeCount: 3,
+      })
+    ).toBe(false);
   });
 
-  test('detects backward wrapping and a single remaining hunk', () => {
-    expect(didNavigationWrap('previous', 5, 20)).toBe(true);
-    expect(didNavigationWrap('previous', 5, 5)).toBe(true);
-    expect(didNavigationWrap('previous', 20, 5)).toBe(false);
+  test('continues backward after wrapping or reaching the file start', () => {
+    expect(
+      shouldOpenAdjacentFile({
+        direction: 'previous',
+        beforeLine: 5,
+        afterLine: 20,
+        lineCount: 100,
+        currentChangeIndex: 1,
+        changeCount: 3,
+      })
+    ).toBe(true);
+    expect(
+      shouldOpenAdjacentFile({
+        direction: 'previous',
+        beforeLine: 0,
+        afterLine: 0,
+        lineCount: 100,
+        currentChangeIndex: 1,
+        changeCount: 2,
+      })
+    ).toBe(true);
+    expect(
+      shouldOpenAdjacentFile({
+        direction: 'previous',
+        beforeLine: 0,
+        afterLine: 0,
+        lineCount: 100,
+        currentChangeIndex: 0,
+        changeCount: 2,
+      })
+    ).toBe(false);
+    expect(
+      shouldOpenAdjacentFile({
+        direction: 'previous',
+        beforeLine: 20,
+        afterLine: 5,
+        lineCount: 100,
+        currentChangeIndex: 1,
+        changeCount: 3,
+      })
+    ).toBe(false);
+    expect(
+      shouldOpenAdjacentFile({
+        direction: 'previous',
+        beforeLine: 5,
+        afterLine: 5,
+        lineCount: 100,
+        currentChangeIndex: 1,
+        changeCount: 3,
+      })
+    ).toBe(false);
   });
 });
 
