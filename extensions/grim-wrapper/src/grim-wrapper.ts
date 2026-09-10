@@ -147,7 +147,8 @@ export function isCommentBreak(text: string) {
  * Returns first line comment prefix.
  *
  * Examples:
- * - `  // Example` → `  //`
+ *
+ * - ` // Example` → ` //`
  */
 export function getCommentPrefix(text: string) {
   const match = text.match(prefixRegExp);

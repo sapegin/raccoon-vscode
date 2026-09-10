@@ -7,6 +7,7 @@ const promiseExecFile = promisify(execFile);
  * Retrieves and normalizes the repository URL from Git configuration.
  *
  * Examples:
+ *
  * - https://github.com/sapegin/taco-cat
  */
 export async function getRepositoryUrl(

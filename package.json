@@ -22,21 +22,21 @@
   },
   "devDependencies": {
     "@types/node": "24.10.1",
-    "@types/vscode": "1.75.0",
-    "@vscode/vsce": "3.9.1",
-    "esbuild": "0.28.1",
+    "@types/vscode": "1.137.0",
+    "@vscode/vsce": "3.9.2",
+    "esbuild": "0.28.2",
     "husky": "9.1.7",
     "nano-staged": "1.0.2",
-    "oxfmt": "0.57.0",
-    "oxlint": "1.72.0",
-    "oxlint-config-raccoon": "10.5.0",
-    "oxlint-tsgolint": "0.23.0",
-    "typescript": "6.0.3",
-    "vitest": "4.1.6"
+    "oxfmt": "0.67.0",
+    "oxlint": "1.82.0",
+    "oxlint-config-raccoon": "10.8.0",
+    "oxlint-tsgolint": "7.0.2001",
+    "typescript": "7.0.2",
+    "vitest": "5.0.0"
   },
   "nano-staged": {
     "*.{js,mjs,cjs,ts,tsx}": "oxlint --fix",
-    "*.{js,mjs,cjs,ts,tsx,css,html,json,jsonc,md}": "oxfmt"
+    "*.{js,mjs,cjs,ts,tsx,css,html,json,jsonc,yml,md}": "oxfmt"
   },
   "engines": {
     "node": ">=24"

@@ -16,10 +16,11 @@ const isNumber = (text: string) => /^\d+$/.test(text);
 
 /**
  * Return the range for the:
- * - selection
- * - selection + tags around
- * - word + tags under cursor
- * - word under cursor
+ *
+ * - Selection
+ * - Selection + tags around
+ * - Word + tags under cursor
+ * - Word under cursor
  */
 function getWordRange(editor: TextEditor, wordPattern: RegExp) {
   // Word is already wrapped in the tags: _tacocat_
