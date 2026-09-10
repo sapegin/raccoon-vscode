@@ -14,6 +14,7 @@ import {
   didNavigationWrap,
   getAdjacentPath,
   isIgnoredPath,
+  normalizePath,
   type NavigationDirection,
 } from './navigation';
 
@@ -30,6 +31,7 @@ export interface GitRepository {
   readonly rootUri: Uri;
   readonly state: {
     readonly workingTreeChanges: readonly GitChange[];
+    readonly untrackedChanges: readonly GitChange[];
   };
 }
 
@@ -78,6 +80,8 @@ function containsPath(rootPath: string, filePath: string): boolean {
 export class Navigator {
   readonly #getGitApi: () => Promise<GitApi | undefined>;
   #pendingNavigation = Promise.resolve();
+  /** Prevents an immediate cross-file bounce after entering a file. */
+  #suppressAdjacentPath: string | undefined;
 
   public constructor(getGitApi: () => Promise<GitApi | undefined>) {
     this.#getGitApi = getGitApi;
@@ -113,11 +117,10 @@ export class Navigator {
         return;
       }
 
-      if (direction === 'next') {
-        await this.openFirstChange(window.activeTextEditor.document.uri);
-      } else {
-        await this.openLastChange(window.activeTextEditor.document.uri);
-      }
+      await this.openEntryChange(
+        window.activeTextEditor.document.uri,
+        direction
+      );
       return;
     }
 
@@ -141,55 +144,65 @@ export class Navigator {
         activeEditor.selection.active.line
       ) === false
     ) {
+      this.#suppressAdjacentPath = undefined;
       return;
     }
 
-    await this.openAdjacentChange(input.modified, direction);
-  }
-
-  private async openFirstChange(currentUri: Uri): Promise<void> {
-    const changes = await this.getChanges(currentUri.fsPath);
-    const firstChange = changes[0];
-    if (firstChange === undefined) {
+    const changes = await this.getChanges(input.modified.fsPath);
+    const adjacentPath = getAdjacentPath(
+      changes.map((change) => change.uri.fsPath),
+      input.modified.fsPath,
+      direction
+    );
+    if (
+      adjacentPath === undefined ||
+      normalizePath(adjacentPath) === normalizePath(input.modified.fsPath)
+    ) {
       return;
     }
 
-    await commands.executeCommand('git.openChange', firstChange.uri);
-    await this.revealBoundaryChange('next', firstChange.uri);
-  }
-
-  private async openLastChange(currentUri: Uri): Promise<void> {
-    const changes = await this.getChanges(currentUri.fsPath);
-    const lastChange = changes.at(-1);
-    if (lastChange === undefined) {
+    if (normalizePath(adjacentPath) === this.#suppressAdjacentPath) {
+      this.#suppressAdjacentPath = undefined;
       return;
     }
 
-    await commands.executeCommand('git.openChange', lastChange.uri);
-    await this.revealBoundaryChange('previous', lastChange.uri);
+    await this.openAdjacentChange(input.modified, direction, adjacentPath);
   }
 
-  private async openAdjacentChange(
+  private async openEntryChange(
     currentUri: Uri,
     direction: NavigationDirection
   ): Promise<void> {
     const changes = await this.getChanges(currentUri.fsPath);
-    const adjacentPath = getAdjacentPath(
-      changes.map((change) => change.uri.fsPath),
-      currentUri.fsPath,
-      direction
+    const focusedChange = changes.find(
+      (change) =>
+        normalizePath(change.uri.fsPath) === normalizePath(currentUri.fsPath)
     );
-    if (adjacentPath === undefined || adjacentPath === currentUri.fsPath) {
+    const targetChange =
+      focusedChange ?? (direction === 'next' ? changes[0] : changes.at(-1));
+    if (targetChange === undefined) {
       return;
     }
 
+    await commands.executeCommand('git.openChange', targetChange.uri);
+    await this.revealBoundaryChange(direction, targetChange.uri);
+  }
+
+  private async openAdjacentChange(
+    currentUri: Uri,
+    direction: NavigationDirection,
+    adjacentPath: string
+  ): Promise<void> {
+    const changes = await this.getChanges(currentUri.fsPath);
     const adjacentChange = changes.find(
-      (change) => change.uri.fsPath === adjacentPath
+      (change) =>
+        normalizePath(change.uri.fsPath) === normalizePath(adjacentPath)
     );
     if (adjacentChange === undefined) {
       return;
     }
 
+    this.#suppressAdjacentPath = normalizePath(currentUri.fsPath);
     await commands.executeCommand('git.openChange', adjacentChange.uri);
     await this.revealBoundaryChange(direction, adjacentChange.uri);
   }
@@ -203,7 +216,16 @@ export class Navigator {
     const ignoredFiles = workspace
       .getConfiguration('gitNavigator')
       .get<readonly string[]>('ignoredFiles', []);
-    return repository.state.workingTreeChanges
+    const changes = [
+      ...repository.state.workingTreeChanges,
+      ...repository.state.untrackedChanges,
+    ];
+    const uniqueChanges = [
+      ...new Map(
+        changes.map((change) => [normalizePath(change.uri.fsPath), change])
+      ).values(),
+    ];
+    return uniqueChanges
       .filter(
         (change) =>
           isIgnoredPath(

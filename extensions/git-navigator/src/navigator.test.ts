@@ -120,6 +120,7 @@ function createGitApi(changes: readonly string[]): GitApi {
               filePath
             ) as GitApi['repositories'][number]['state']['workingTreeChanges'][number]['uri'],
           })),
+          untrackedChanges: [],
         },
       },
     ],
@@ -202,6 +203,27 @@ describe(Navigator, () => {
     ).toHaveLength(2);
   });
 
+  test('opens the focused file when it has changes', async () => {
+    vscodeState.activeTextEditor = createEditor('/project/new.ts', 0);
+    executeCommand.mockImplementation((command, uri) => {
+      if (command === 'git.openChange') {
+        queueMicrotask(() => {
+          setDiffTab((uri as MockUri).fsPath, 0);
+        });
+      }
+      return Promise.resolve();
+    });
+
+    await createNavigator(['/project/a.ts', '/project/new.ts']).enqueue('next');
+
+    expect(commandCalls('git.openChange')).toStrictEqual([
+      [
+        'git.openChange',
+        expect.objectContaining({ fsPath: '/project/new.ts' }),
+      ],
+    ]);
+  });
+
   test('opens the first changed file from a regular editor', async () => {
     vscodeState.activeTextEditor = createEditor('/project/context.ts', 0);
     executeCommand.mockImplementation((command, uri) => {
@@ -269,6 +291,32 @@ describe(Navigator, () => {
     expect(
       commandCalls('workbench.action.compareEditor.nextChange')
     ).toStrictEqual([['workbench.action.compareEditor.nextChange']]);
+    expect(commandCalls('git.openChange')).toHaveLength(0);
+  });
+
+  test('does not immediately bounce back to the previous file', async () => {
+    setDiffTab('/project/new.ts', 0);
+    executeCommand.mockImplementation((command, uri) => {
+      if (command === 'workbench.action.compareEditor.nextChange') {
+        const activeEditor = vscodeState.visibleTextEditors[0];
+        if (activeEditor !== undefined) {
+          activeEditor.selection.active.line = 0;
+        }
+        return Promise.resolve();
+      }
+
+      if (command === 'git.openChange') {
+        setDiffTab((uri as MockUri).fsPath, 10);
+      }
+      return Promise.resolve();
+    });
+
+    const navigator = createNavigator(['/project/new.ts', '/project/other.ts']);
+    await navigator.enqueue('next');
+    expectGitOpenChange('/project/other.ts');
+
+    executeCommand.mockClear();
+    await navigator.enqueue('next');
     expect(commandCalls('git.openChange')).toHaveLength(0);
   });
 

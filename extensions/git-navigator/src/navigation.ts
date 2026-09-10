@@ -2,6 +2,11 @@ import path from 'node:path';
 
 export type NavigationDirection = 'next' | 'previous';
 
+/** Normalizes paths for stable comparisons across Git and editor URIs. */
+export function normalizePath(filePath: string): string {
+  return path.normalize(filePath).toLowerCase();
+}
+
 const fileNameCollator = new Intl.Collator(undefined, {
   numeric: true,
   sensitivity: 'base',
@@ -86,7 +91,9 @@ export function getAdjacentPath(
     return undefined;
   }
 
-  const currentIndex = paths.indexOf(currentPath);
+  const normalizedCurrentPath = normalizePath(currentPath);
+  const normalizedPaths = paths.map((candidate) => normalizePath(candidate));
+  const currentIndex = normalizedPaths.indexOf(normalizedCurrentPath);
   if (currentIndex !== -1) {
     const offset = direction === 'next' ? 1 : -1;
     return paths[(currentIndex + offset + paths.length) % paths.length];
