@@ -245,9 +245,14 @@ describe(Navigator, () => {
 
   test('opens the last changed file from a regular editor', async () => {
     vscodeState.activeTextEditor = createEditor('/project/context.ts', 0);
+    let lineBeforePreviousChange: number | undefined;
     executeCommand.mockImplementation((command, uri) => {
       if (command === 'git.openChange') {
         setDiffTab((uri as MockUri).fsPath, 40);
+      }
+      if (command === 'workbench.action.compareEditor.previousChange') {
+        lineBeforePreviousChange =
+          vscodeState.visibleTextEditors[0]?.selection.active.line;
       }
       return Promise.resolve();
     });
@@ -260,6 +265,7 @@ describe(Navigator, () => {
     expect(
       commandCalls('workbench.action.compareEditor.previousChange')
     ).toHaveLength(1);
+    expect(lineBeforePreviousChange).toBe(99);
   });
 
   test('does not reopen the only changed file when navigation wraps', async () => {

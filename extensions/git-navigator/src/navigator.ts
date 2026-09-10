@@ -259,11 +259,10 @@ export class Navigator {
       return;
     }
 
-    const boundaryLine =
-      direction === 'next' ? editor.document.lineCount - 1 : 0;
+    const boundaryLine = editor.document.lineCount - 1;
     const boundary = editor.document.lineAt(boundaryLine).range.end;
-    // Built-in change navigation reaches the first/last hunk only from the
-    // file edge, so move there before delegating to the diff editor command.
+    // Built-in change navigation reaches the first/last hunk from the file
+    // end: nextChange wraps to the first hunk, previousChange steps to the last.
     editor.selection = new Selection(boundary, boundary);
     await commands.executeCommand(commandsByDirection[direction]);
   }
