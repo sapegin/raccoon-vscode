@@ -82,7 +82,7 @@ export class BlameManager {
   public async open(editor: TextEditor) {
     const workspaceRoot = this.getWorkspaceRoot(editor);
     if (workspaceRoot === undefined) {
-      window.showErrorMessage('Workspace is required to use Just Blame');
+      window.showErrorMessage(this.getMissingWorkspaceMessage(editor.document));
       return false;
     }
 
@@ -93,7 +93,9 @@ export class BlameManager {
 
     logMessage('Workspace root:', workspaceRoot);
 
-    const relativePath = workspace.asRelativePath(editor.document.uri);
+    // Path relative to the containing folder only; the default prepends the
+    // workspace folder display name and breaks blame in multi-root workspaces
+    const relativePath = workspace.asRelativePath(editor.document.uri, false);
     this.blameResults = await getBlameInfo(workspaceRoot, relativePath);
 
     if (this.blameResults.length === 0) {
@@ -139,6 +141,29 @@ export class BlameManager {
 
   private getWorkspaceRoot(editor: TextEditor) {
     return workspace.getWorkspaceFolder(editor.document.uri)?.uri.fsPath;
+  }
+
+  private getMissingWorkspaceMessage(document: TextDocument) {
+    if (document.isUntitled) {
+      return 'Save the file into a workspace folder before using Just Blame';
+    }
+
+    const workspaceFolders = workspace.workspaceFolders;
+    if (workspaceFolders === undefined || workspaceFolders.length === 0) {
+      return 'Open a folder or multi-root workspace before using Just Blame';
+    }
+
+    if (
+      document.uri.scheme !== 'file' &&
+      document.uri.scheme !== 'vscode-remote'
+    ) {
+      return 'Just Blame only works with files opened from a workspace folder on disk';
+    }
+
+    const folderNames = workspaceFolders
+      .map((folder) => folder.name)
+      .join(', ');
+    return `This file is not under any workspace folder (${folderNames}). Open it from a workspace root or add its folder to the workspace`;
   }
 
   /**
