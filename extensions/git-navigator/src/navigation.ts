@@ -70,45 +70,16 @@ export function isIgnoredPath(
   );
 }
 
-export interface AdjacentFileContext {
-  direction: NavigationDirection;
-  beforeLine: number;
-  afterLine: number;
-  lineCount: number;
-  currentChangeIndex: number;
-  changeCount: number;
-}
-
 /**
- * Returns whether file-local navigation hit a file boundary and should continue
- * in the next file.
+ * Returns whether compare-editor navigation moved to another hunk in the same
+ * file. Equal before/after lines mean navigation stayed on the same hunk.
  */
-export function shouldOpenAdjacentFile(context: AdjacentFileContext): boolean {
-  const {
-    direction,
-    beforeLine,
-    afterLine,
-    lineCount,
-    currentChangeIndex,
-    changeCount,
-  } = context;
-  const lastLine = lineCount - 1;
-
-  if (direction === 'next') {
-    return (
-      afterLine < beforeLine ||
-      (afterLine === beforeLine &&
-        (beforeLine >= lastLine ||
-          (beforeLine === 0 &&
-            currentChangeIndex >= 0 &&
-            currentChangeIndex < changeCount - 1)))
-    );
-  }
-
-  return (
-    afterLine > beforeLine ||
-    (afterLine === beforeLine && beforeLine <= 0 && currentChangeIndex > 0)
-  );
+export function hasMovedWithinFile(
+  direction: NavigationDirection,
+  beforeLine: number,
+  afterLine: number
+): boolean {
+  return direction === 'next' ? afterLine > beforeLine : afterLine < beforeLine;
 }
 
 /** Finds the adjacent path, including when the current change was just removed. */

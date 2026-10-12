@@ -2,8 +2,8 @@ import { describe, expect, test } from 'vitest';
 import {
   compareSourceControlPaths,
   getAdjacentPath,
-  shouldOpenAdjacentFile,
   isIgnoredPath,
+  hasMovedWithinFile,
 } from './navigation';
 
 describe(compareSourceControlPaths, () => {
@@ -47,121 +47,12 @@ describe(isIgnoredPath, () => {
   });
 });
 
-describe(shouldOpenAdjacentFile, () => {
-  test('continues forward after wrapping or reaching the file end', () => {
-    expect(
-      shouldOpenAdjacentFile({
-        direction: 'next',
-        beforeLine: 20,
-        afterLine: 5,
-        lineCount: 100,
-        currentChangeIndex: 1,
-        changeCount: 3,
-      })
-    ).toBe(true);
-    expect(
-      shouldOpenAdjacentFile({
-        direction: 'next',
-        beforeLine: 99,
-        afterLine: 99,
-        lineCount: 100,
-        currentChangeIndex: 1,
-        changeCount: 3,
-      })
-    ).toBe(true);
-    expect(
-      shouldOpenAdjacentFile({
-        direction: 'next',
-        beforeLine: 0,
-        afterLine: 0,
-        lineCount: 1,
-        currentChangeIndex: 0,
-        changeCount: 2,
-      })
-    ).toBe(true);
-    expect(
-      shouldOpenAdjacentFile({
-        direction: 'next',
-        beforeLine: 0,
-        afterLine: 0,
-        lineCount: 100,
-        currentChangeIndex: 0,
-        changeCount: 2,
-      })
-    ).toBe(true);
-    expect(
-      shouldOpenAdjacentFile({
-        direction: 'next',
-        beforeLine: 0,
-        afterLine: 0,
-        lineCount: 100,
-        currentChangeIndex: 1,
-        changeCount: 2,
-      })
-    ).toBe(false);
-    expect(
-      shouldOpenAdjacentFile({
-        direction: 'next',
-        beforeLine: 20,
-        afterLine: 30,
-        lineCount: 100,
-        currentChangeIndex: 1,
-        changeCount: 3,
-      })
-    ).toBe(false);
-  });
-
-  test('continues backward after wrapping or reaching the file start', () => {
-    expect(
-      shouldOpenAdjacentFile({
-        direction: 'previous',
-        beforeLine: 5,
-        afterLine: 20,
-        lineCount: 100,
-        currentChangeIndex: 1,
-        changeCount: 3,
-      })
-    ).toBe(true);
-    expect(
-      shouldOpenAdjacentFile({
-        direction: 'previous',
-        beforeLine: 0,
-        afterLine: 0,
-        lineCount: 100,
-        currentChangeIndex: 1,
-        changeCount: 2,
-      })
-    ).toBe(true);
-    expect(
-      shouldOpenAdjacentFile({
-        direction: 'previous',
-        beforeLine: 0,
-        afterLine: 0,
-        lineCount: 100,
-        currentChangeIndex: 0,
-        changeCount: 2,
-      })
-    ).toBe(false);
-    expect(
-      shouldOpenAdjacentFile({
-        direction: 'previous',
-        beforeLine: 20,
-        afterLine: 5,
-        lineCount: 100,
-        currentChangeIndex: 1,
-        changeCount: 3,
-      })
-    ).toBe(false);
-    expect(
-      shouldOpenAdjacentFile({
-        direction: 'previous',
-        beforeLine: 5,
-        afterLine: 5,
-        lineCount: 100,
-        currentChangeIndex: 1,
-        changeCount: 3,
-      })
-    ).toBe(false);
+describe(hasMovedWithinFile, () => {
+  test('detects movement within a file in the navigation direction', () => {
+    expect(hasMovedWithinFile('next', 10, 30)).toBe(true);
+    expect(hasMovedWithinFile('next', 30, 10)).toBe(false);
+    expect(hasMovedWithinFile('previous', 30, 10)).toBe(true);
+    expect(hasMovedWithinFile('previous', 10, 30)).toBe(false);
   });
 });
 

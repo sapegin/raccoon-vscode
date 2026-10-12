@@ -10,10 +10,10 @@ interface MockEditor {
     uri: MockUri;
     lineCount: number;
     lineAt: (lineNumber: number) => {
-      range: { end: { line: number; character: number } };
+      range: { start: { line: number; character: number }; end: unknown };
     };
   };
-  selection: { active: { line: number } };
+  selection: { active: { line: number; character: number } };
 }
 
 const hoisted = vi.hoisted(() => {
@@ -100,14 +100,29 @@ function createEditor(uri: string, line: number, lineCount = 100): MockEditor {
       uri: createUri.file(uri),
       lineCount,
       lineAt: (lineNumber: number) => ({
-        range: { end: { line: lineNumber, character: 0 } },
+        range: {
+          start: { line: lineNumber, character: 0 },
+          end: { line: lineNumber, character: 0 },
+        },
       }),
     },
-    selection: { active: { line } },
+    selection: { active: { line, character: 0 } },
   };
 }
 
-function createGitApi(changes: readonly string[]): GitApi {
+function createGitApi(
+  changes: readonly string[],
+  options: {
+    indexChanges?: readonly string[];
+    untrackedChanges?: readonly string[];
+  } = {}
+): GitApi {
+  const toChange = (filePath: string) => ({
+    uri: createUri.file(
+      filePath
+    ) as GitApi['repositories'][number]['state']['workingTreeChanges'][number]['uri'],
+  });
+
   return {
     repositories: [
       {
@@ -115,12 +130,9 @@ function createGitApi(changes: readonly string[]): GitApi {
           '/project'
         ) as GitApi['repositories'][number]['rootUri'],
         state: {
-          workingTreeChanges: changes.map((filePath) => ({
-            uri: createUri.file(
-              filePath
-            ) as GitApi['repositories'][number]['state']['workingTreeChanges'][number]['uri'],
-          })),
-          untrackedChanges: [],
+          indexChanges: (options.indexChanges ?? []).map(toChange),
+          workingTreeChanges: changes.map(toChange),
+          untrackedChanges: (options.untrackedChanges ?? []).map(toChange),
         },
       },
     ],
@@ -148,8 +160,14 @@ function expectGitOpenChange(filePath: string) {
   ]);
 }
 
-function createNavigator(changes: readonly string[]) {
-  return new Navigator(() => Promise.resolve(createGitApi(changes)));
+function createNavigator(
+  changes: readonly string[],
+  options: {
+    indexChanges?: readonly string[];
+    untrackedChanges?: readonly string[];
+  } = {}
+) {
+  return new Navigator(() => Promise.resolve(createGitApi(changes, options)));
 }
 
 describe(Navigator, () => {
@@ -164,7 +182,7 @@ describe(Navigator, () => {
     vi.clearAllMocks();
   });
 
-  test('delegates within a diff file when navigation does not wrap', async () => {
+  test('delegates to diff navigation for the next hunk in the same file', async () => {
     const editor = setDiffTab('/project/a.ts', 10);
     executeCommand.mockImplementation((command) => {
       if (command === 'workbench.action.compareEditor.nextChange') {
@@ -339,19 +357,13 @@ describe(Navigator, () => {
     ]);
   });
 
-  test('stays on a file when the first hunk has more changes ahead', async () => {
+  test('navigates across staged new files listed only in indexChanges', async () => {
     setDiffTab('/project/new.ts', 0);
     executeCommand.mockImplementation((command, uri) => {
       if (command === 'workbench.action.compareEditor.nextChange') {
         const activeEditor = vscodeState.visibleTextEditors[0];
-        if (activeEditor === undefined) {
-          return Promise.resolve();
-        }
-
-        if (activeEditor.document.uri.fsPath.endsWith('new.ts')) {
+        if (activeEditor !== undefined) {
           activeEditor.selection.active.line = 0;
-        } else {
-          activeEditor.selection.active.line = 10;
         }
         return Promise.resolve();
       }
@@ -362,14 +374,45 @@ describe(Navigator, () => {
       return Promise.resolve();
     });
 
-    const navigator = createNavigator(['/project/new.ts', '/project/other.ts']);
-    await navigator.enqueue('next');
-    expectGitOpenChange('/project/other.ts');
+    await createNavigator([], {
+      indexChanges: ['/project/new.ts', '/project/other.ts'],
+    }).enqueue('next');
 
-    executeCommand.mockClear();
-    await navigator.enqueue('next');
-    expect(commandCalls('git.openChange')).toHaveLength(0);
-    expect(vscodeState.visibleTextEditors[0]?.selection.active.line).toBe(10);
+    expect(commandCalls('git.openChange')).toStrictEqual([
+      [
+        'git.openChange',
+        expect.objectContaining({ fsPath: '/project/other.ts' }),
+      ],
+    ]);
+  });
+
+  test('wraps forward from the last new file when diff navigation does not move', async () => {
+    setDiffTab('/project/other.ts', 0);
+    executeCommand.mockImplementation((command, uri) => {
+      if (command === 'workbench.action.compareEditor.nextChange') {
+        const activeEditor = vscodeState.visibleTextEditors[0];
+        if (activeEditor !== undefined) {
+          activeEditor.selection.active.line = 0;
+        }
+        return Promise.resolve();
+      }
+
+      if (command === 'git.openChange') {
+        setDiffTab((uri as MockUri).fsPath, 0);
+      }
+      return Promise.resolve();
+    });
+
+    await createNavigator(['/project/new.ts'], {
+      untrackedChanges: ['/project/other.ts'],
+    }).enqueue('next');
+
+    expect(commandCalls('git.openChange')).toStrictEqual([
+      [
+        'git.openChange',
+        expect.objectContaining({ fsPath: '/project/new.ts' }),
+      ],
+    ]);
   });
 
   test('reads the Git API again when it becomes available later', async () => {
